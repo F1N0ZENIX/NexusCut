@@ -14,13 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import java.io.File
 import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicBoolean
 
 /** Isolated WAV preview experiment; never writes into a project or source URI. */
 class BnrPrototypeActivity : AppCompatActivity() {
     private val executor = Executors.newSingleThreadExecutor()
     private val lock = Any()
-    private val cancelled = AtomicBoolean(false)
+    private var gate: BnrCompletionGate? = null
     private var transport: NvidiaBnrTransport? = null
     private var running = false
     private var result: File? = null
@@ -40,7 +39,7 @@ class BnrPrototypeActivity : AppCompatActivity() {
         setContentView(ScrollView(this).apply { addView(layout) })
         fun text(s: String) = TextView(this).apply { text = s; textSize = 16f; layout.addView(this) }
         fun button(s: String, f: () -> Unit) = Button(this).apply { text = s; setOnClickListener { f() }; layout.addView(this) }
-        text("BNR NVIDIA — protótipo separado do editor. Apenas WAV PCM 16-bit mono, 16 ou 48 kHz, até 35 MB e 6 minutos. Sem conversão automática.")
+        text("BNR NVIDIA — protótipo separado do editor. Apenas WAV PCM 16-bit mono, 16 ou 48 kHz, até 512 KiB incluindo cabeçalho (limite temporário). Sem conversão automática.")
         status = text("Selecione um WAV de teste. Cadastre a chave NVIDIA no gateway antes de enviar.")
         select = button("Selecionar WAV") {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -79,12 +78,16 @@ class BnrPrototypeActivity : AppCompatActivity() {
         if (running) return
         running = true
         result = null // do not present an older result as if it belonged to this request
-        cancelled.set(false)
+        val operation = BnrCompletionGate()
+        gate = operation
+        val cancelled = operation.cancelled
         status.text = "Validando e enviando…"
         refresh()
         executor.execute {
             val client = NvidiaBnrTransport()
             synchronized(lock) { transport = client; if (cancelled.get()) client.cancel() }
+            var created: File? = null
+            var message = "Falha. Confira WAV, chave, conexão e disponibilidade da NVIDIA. Nenhuma alteração no original."
             try {
                 val bytes = contentResolver.openInputStream(uri)?.use { BnrWav.read(it, cancelled) }
                     ?: error("Não foi possível abrir o arquivo")
@@ -95,33 +98,38 @@ class BnrPrototypeActivity : AppCompatActivity() {
                 val output = BnrProcessor(client).run(bytes, key, cancelled)
                 val dir = File(cacheDir, "bnr-results")
                 check(dir.isDirectory || dir.mkdirs())
-                var created: File? = null
-                try {
-                    created = File.createTempFile("bnr-", ".wav", dir)
-                    created.outputStream().use { it.write(output); it.flush(); it.fd.sync() }
-                    val completed = created
-                    synchronized(lock) {
-                        if (cancelled.get()) throw java.util.concurrent.CancellationException()
-                        result = completed
-                    }
-                    created = null
-                    runOnUiThread {
-                        if (!isFinishing && !isDestroyed) status.text = "Resultado validado e guardado temporariamente no cache. Compartilhe para salvar fora do app. O original não foi modificado."
-                    }
-                } finally { created?.delete() }
+                val temp = File.createTempFile("bnr-", ".wav", dir)
+                created = temp
+                temp.outputStream().use { it.write(output); it.flush(); it.fd.sync() }
+                if (cancelled.get()) throw java.util.concurrent.CancellationException()
+                message = "Resultado validado e guardado temporariamente no cache. Compartilhe para salvar fora do app. O original não foi modificado."
             } catch (_: java.util.concurrent.CancellationException) {
-                runOnUiThread { if (!isFinishing && !isDestroyed) status.text = "Cancelado. A NVIDIA ainda pode ter recebido parte do áudio." }
+                created?.delete()
+                created = null
             } catch (_: Exception) {
-                runOnUiThread { if (!isFinishing && !isDestroyed) status.text = "Falha. Confira WAV, chave, conexão e disponibilidade da NVIDIA. Nenhuma alteração no original." }
+                created?.delete()
+                created = null
             } finally {
                 synchronized(lock) { transport = null }
-                runOnUiThread { if (!isFinishing && !isDestroyed) { running = false; refresh() } }
+            }
+            val completed = created
+            val finalMessage = message
+            runOnUiThread {
+                // Cancellation, publication and refresh all happen on the UI thread.
+                if (!isFinishing && !isDestroyed && operation.finish()) {
+                    result = completed
+                    status.text = finalMessage
+                } else {
+                    completed?.delete()
+                    if (!isFinishing && !isDestroyed) status.text = "Cancelado. A NVIDIA ainda pode ter recebido parte do áudio."
+                }
+                if (!isFinishing && !isDestroyed) { running = false; refresh() }
             }
         }
     }
 
     private fun cancelOperation() {
-        synchronized(lock) { cancelled.set(true); transport?.cancel() }
+        synchronized(lock) { if (gate?.cancel() == true) transport?.cancel() }
     }
     private fun refresh() { select.isEnabled = !running; stop.isEnabled = running; share.isEnabled = !running && result?.isFile == true }
     private fun shareResult() {
