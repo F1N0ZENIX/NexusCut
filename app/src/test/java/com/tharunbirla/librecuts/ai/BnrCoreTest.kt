@@ -23,7 +23,7 @@ class BnrCoreTest {
         }
         override fun cancel() = Unit
     }
-    @Test fun fakeRoundTripPreservesOriginalAndTiming() {
+    @Test fun fakeRoundTripPreservesBytesRateAndFrameCount() {
         val source = wav()
         val original = source.clone()
         val fake = Fake { it.clone() }
@@ -38,10 +38,42 @@ class BnrCoreTest {
         assertEquals(0, fake.calls)
         try { BnrWav.validate(wav().copyOf(50)); fail() } catch (_: IllegalArgumentException) { }
     }
-    @Test fun rejectsMismatchedOutputAndOverlongInput() {
+    @Test fun rejectsMismatchedAndOversizedOutput() {
         try { BnrProcessor(Fake { wav(159) }).run(wav(), "fake-only", AtomicBoolean()); fail() } catch (_: IllegalArgumentException) { }
-        try { BnrWav.validate(wav(16000 * 360 + 1)); fail() } catch (_: IllegalArgumentException) { }
-        assertEquals(16000L * 360, BnrWav.validate(wav(16000 * 360)).frames)
+        try { BnrProcessor(Fake { ByteArray(BnrWav.LIMIT + 1) }).run(wav(), "fake-only", AtomicBoolean()); fail() } catch (_: IllegalArgumentException) { }
+    }
+    @Test fun acceptsExactLimitAndRejectsOneByteMore() {
+        val atLimit = wav((BnrWav.LIMIT - 44) / 2)
+        assertEquals(BnrWav.LIMIT, atLimit.size)
+        assertEquals(atLimit.size, BnrWav.read(ByteArrayInputStream(atLimit), AtomicBoolean()).size)
+        assertEquals(((BnrWav.LIMIT - 44) / 2).toLong(), BnrWav.validate(atLimit).frames)
+        try { BnrWav.read(ByteArrayInputStream(ByteArray(BnrWav.LIMIT + 1)), AtomicBoolean()); fail() } catch (_: IllegalArgumentException) { }
+    }
+    @Test fun cancellationWinsBeforePublication() {
+        val gate = BnrCompletionGate()
+        assertTrue(gate.cancel())
+        assertTrue(gate.cancelled.get())
+        assertFalse(gate.finish())
+        assertFalse(gate.finish())
+    }
+    @Test fun completionWinsBeforeCancellation() {
+        val gate = BnrCompletionGate()
+        assertTrue(gate.finish())
+        assertFalse(gate.cancel())
+        assertFalse(gate.cancelled.get())
+        assertFalse(gate.finish())
+    }
+    @Test fun cancellationAndCompletionAreMutuallyExclusive() {
+        repeat(100) {
+            val gate = BnrCompletionGate()
+            val start = java.util.concurrent.CountDownLatch(1)
+            val cancelWon = AtomicBoolean()
+            val finishWon = AtomicBoolean()
+            val a = Thread { start.await(); cancelWon.set(gate.cancel()) }
+            val b = Thread { start.await(); finishWon.set(gate.finish()) }
+            a.start(); b.start(); start.countDown(); a.join(); b.join()
+            assertNotEquals(cancelWon.get(), finishWon.get())
+        }
     }
     @Test fun cancelBeforeAndAfterTransport() {
         val cancelled = AtomicBoolean(true); val fake = Fake { it }
