@@ -34,6 +34,8 @@
 
 **LibreCuts** is a free, open-source video editor for Android that prioritizes simplicity, efficiency, and privacy. Built for seamless performance, it empowers creators to easily select, edit, and export watermark-free videos locally on their device.
 
+> **Experimental NexusCut branch:** the AI gateway currently only stores API keys; transcription, media upload and SRT saving are disabled pending safety validation. Do not publish this experiment. See [AI gateway security and limitations](docs/ai-gateway.md). The existing “check for updates” button opens the upstream LibreCuts releases page in an external browser; it does not automatically check or install NexusCut updates. The browser needs a network connection. Removing the gateway's explicit Internet permission does not establish that the whole app or its merged manifest is offline.
+
 ---
 
 ## ✊ Keep Android Open
