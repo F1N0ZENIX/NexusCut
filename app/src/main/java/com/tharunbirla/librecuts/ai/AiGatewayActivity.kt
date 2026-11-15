@@ -31,9 +31,10 @@ class AiGatewayActivity : AppCompatActivity() {
             it.text = text; it.setOnClickListener { onClick() }; content.addView(it)
         }
         label("Gateway de IA — tela simples de teste")
-        label("As chaves ficam criptografadas neste dispositivo. NVIDIA e Z.ai: somente cadastro, sem integração de tarefas.")
+        label("As chaves ficam criptografadas neste dispositivo. Z.ai: somente cadastro.")
         for (provider in AiProvider.values()) button("Chave: ${providerLabel(provider)}") { manageKey(provider) }
-        label("Transcrição e salvamento de SRT estão desativados nesta versão experimental por segurança. Nenhum arquivo será enviado.")
+        button("BNR NVIDIA — protótipo WAV") { startActivity(android.content.Intent(this, BnrPrototypeActivity::class.java)) }
+        label("Transcrição e salvamento de SRT permanecem desativados. BNR só envia após confirmação explícita.")
     }
 
     private fun providerLabel(provider: AiProvider): String = when (provider) {
