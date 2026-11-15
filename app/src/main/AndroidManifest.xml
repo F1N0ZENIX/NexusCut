@@ -67,6 +67,11 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ai.AiGatewayActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+
+        <activity
             android:name=".ProjectImportActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
