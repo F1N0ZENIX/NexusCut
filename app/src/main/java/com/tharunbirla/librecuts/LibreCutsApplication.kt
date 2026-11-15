@@ -4,10 +4,13 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import com.tharunbirla.librecuts.utils.ErrorCode
+import com.tharunbirla.librecuts.ai.cleanupLegacyUploads
 
 class LibreCutsApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        // The old gateway uploader is disabled; no current task can own these files.
+        cleanupLegacyUploads(cacheDir)
         setupGlobalCrashHandler()
     }
 
