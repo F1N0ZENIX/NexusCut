@@ -8,7 +8,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 /** Narrow transactional-preview contract. This is not the editor timeline. */
 internal data class WavInfo(val rate: Int, val frames: Long)
 internal object BnrWav {
-    const val LIMIT = 35_000_000
+    // Temporary in-memory prototype cap (including WAV header), not a streaming solution.
+    const val LIMIT = 512 * 1024
     fun read(input: InputStream, cancelled: AtomicBoolean): ByteArray {
         val out = ByteArrayOutputStream()
         val buffer = ByteArray(64 * 1024)
@@ -17,7 +18,7 @@ internal object BnrWav {
             val n = input.read(buffer)
             if (n < 0) break
             if (n == 0) continue
-            require(out.size().toLong() + n <= LIMIT) { "WAV maior que 35 MB" }
+            require(out.size().toLong() + n <= LIMIT) { "WAV maior que 512 KiB (limite temporário)" }
             out.write(buffer, 0, n)
         }
         return out.toByteArray()
@@ -52,6 +53,22 @@ internal object BnrWav {
         }
         require(pos == b.size && foundFmt && frames > 0 && frames <= rate.toLong() * 360) { "WAV inválido ou acima de 6 minutos" }
         return WavInfo(rate, frames)
+    }
+}
+
+/** Linearizes cancellation vs. publication. A completed operation is no longer cancellable. */
+internal class BnrCompletionGate {
+    val cancelled = AtomicBoolean(false)
+    private var finished = false
+    @Synchronized fun cancel(): Boolean {
+        if (finished) return false
+        cancelled.set(true)
+        return true
+    }
+    @Synchronized fun finish(): Boolean {
+        if (finished || cancelled.get()) return false
+        finished = true
+        return true
     }
 }
 

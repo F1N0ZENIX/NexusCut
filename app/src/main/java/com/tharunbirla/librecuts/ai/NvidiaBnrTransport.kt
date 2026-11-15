@@ -20,7 +20,10 @@ internal class NvidiaBnrTransport : BnrTransport {
     override fun cancel() { channel?.shutdownNow() }
 
     override fun enhance(input: ByteArray, key: String, cancelled: AtomicBoolean): ByteArray {
+        require(input.size <= BnrWav.LIMIT) { "WAV maior que 512 KiB (limite temporário)" }
         val ch = OkHttpChannelBuilder.forAddress("grpc.nvcf.nvidia.com", 443)
+            // Allow one complete capped WAV plus protobuf envelope, never an unbounded message.
+            .maxInboundMessageSize(BnrWav.LIMIT + 1024)
             .useTransportSecurity().build()
         channel = ch
         try {
