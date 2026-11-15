@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id 'com.google.protobuf' version '0.9.4'
 }
 
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
@@ -84,7 +85,22 @@ android {
     }
 }
 
+protobuf {
+    protoc { artifact = 'com.google.protobuf:protoc:3.25.5' }
+    plugins { grpc { artifact = 'io.grpc:protoc-gen-grpc-java:1.68.1' } }
+    generateProtoTasks {
+        all().configureEach { task ->
+            task.builtins { java { option 'lite' } }
+            task.plugins { grpc { option 'lite' } }
+        }
+    }
+}
+
 dependencies {
+    implementation 'io.grpc:grpc-okhttp:1.68.1'
+    implementation 'io.grpc:grpc-protobuf-lite:1.68.1'
+    implementation 'io.grpc:grpc-stub:1.68.1'
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
     implementation 'com.google.android.exoplayer:exoplayer-core:2.19.1'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.19.1'
     implementation("com.antonkarpenko:ffmpeg-kit-full-gpl:2.1.0")
