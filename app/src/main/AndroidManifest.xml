@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- O protótipo NVIDIA faz envio somente após consentimento. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Permissions -->
     <!-- For Android 13+ (API 33+) -->
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
@@ -65,6 +67,16 @@
             android:theme="@style/Editor"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
             android:windowSoftInputMode="adjustResize" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.bnrfiles"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/bnr_share_paths" />
+        </provider>
+
+        <activity android:name=".ai.BnrPrototypeActivity" android:exported="false" />
 
         <activity
             android:name=".ai.AiGatewayActivity"
