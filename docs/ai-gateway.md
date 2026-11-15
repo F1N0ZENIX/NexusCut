@@ -21,3 +21,5 @@ A permissão `INTERNET` explicitamente adicionada pela versão anterior do gatew
 ## Validação obrigatória
 
 Não publicar sem JDK 17, SDK Android 34 e Gradle wrapper 8.9: executar `./gradlew assembleDebug testDebugUnitTest lintDebug` e `./gradlew connectedDebugAndroidTest`. Testar em Android 8 e versões mais recentes: simular `.bak` sem arquivo base, perda de chave mestra, exclusão, limpeza após encerramento abrupto, rotação e screenshot/gravação da activity e do diálogo de chave; inspecionar manifesto mesclado, privacidade do teclado e logs. Os testes instrumentados usam dados fictícios. A funcionalidade e compilação não foram validadas em dispositivo nesta revisão. O fluxo de IA deve continuar desativado até implementação segura e validação de ponta a ponta.
+
+> Experimental: use apenas chaves fictícias até que a compilação e os testes de segurança sejam validados.
