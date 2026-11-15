@@ -160,6 +160,10 @@ class MainActivity : AppCompatActivity() {
             switchTab(2)
         }
         
+        binding.btnAiGateway.setBounceClickListener {
+            startActivity(Intent(this, com.tharunbirla.librecuts.ai.AiGatewayActivity::class.java))
+        }
+
         // Setup Settings Actions
         binding.btnChangeExportFolder.setBounceClickListener {
             selectFolderLauncher.launch(null)
