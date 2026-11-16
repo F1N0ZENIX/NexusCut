@@ -93,7 +93,7 @@ fun TranscriptPanel(vm: EditorViewModel) {
                 scope.launch(Dispatchers.Main) {
                     job = null
                     vm.transcript = lines
-                    if (lines.isEmpty()) vm.message = "No speech was found"
+                    if (lines.isEmpty()) vm.message = "Nenhuma fala encontrada"
                 }
             }
 
@@ -160,7 +160,7 @@ fun TranscriptPanel(vm: EditorViewModel) {
         }
     }
 
-    PanelFrame("Transcript", vm, tall = true, titleOnTop = true, left = {
+    PanelFrame("Transcrição", vm, tall = true, titleOnTop = true, left = {
         if (lines != null && job == null) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
@@ -220,10 +220,10 @@ fun TranscriptPanel(vm: EditorViewModel) {
                     )
                 }
                 Spacer(Modifier.height(8.dp))
-                Text("Made on this phone; nothing is uploaded.", style = Type.Tiny.copy(color = Palette.TextSecondary))
+                Text("Feito neste celular; nada é enviado para a internet.", style = Type.Tiny.copy(color = Palette.TextSecondary))
             }
             lines.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No speech was found", style = Type.Body.copy(color = Palette.TextSecondary))
+                Text("Nenhuma fala encontrada", style = Type.Body.copy(color = Palette.TextSecondary))
             }
             else -> LazyColumn(Modifier.fillMaxSize().padding(horizontal = 8.dp)) {
                 itemsIndexed(lines, key = { _, l -> "${l.startUs}-${l.text}" }) { i, line ->
@@ -244,7 +244,7 @@ fun TranscriptPanel(vm: EditorViewModel) {
                         Box(
                             Modifier.size(38.dp).clip(CircleShape).clickable { cut(i) },
                             contentAlignment = Alignment.Center,
-                        ) { Glyph(LucideIcons.Trash2, Palette.TextSecondary, size = 18.dp, description = "Cut this line") }
+                        ) { Glyph(LucideIcons.Trash2, Palette.TextSecondary, size = 18.dp, description = "Cortar esta linha") }
                     }
                 }
             }

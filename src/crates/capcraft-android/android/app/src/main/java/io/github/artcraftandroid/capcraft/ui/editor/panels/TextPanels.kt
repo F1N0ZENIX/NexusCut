@@ -253,7 +253,7 @@ fun TextPanel(vm: EditorViewModel, clipId: String?, startTab: Int = 3) {
     // favourites: a long press on a template or a font keeps it under the bookmark
     val context = androidx.compose.ui.platform.LocalContext.current
     fun kept(on: Boolean) {
-        vm.message = if (on) "Added to favorites" else "Removed from favorites"
+        vm.message = if (on) "Adicionado aos favoritos" else "Removido dos favoritos"
     }
 
     // the words open in a full-screen editor from the field's expand button
@@ -299,7 +299,7 @@ fun TextPanel(vm: EditorViewModel, clipId: String?, startTab: Int = 3) {
                 decorationBox = { inner ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(Modifier.weight(1f)) {
-                            if (text.isEmpty()) Text("Enter text", style = Type.Body.copy(fontSize = 16.sp, color = Palette.TextSecondary))
+                            if (text.isEmpty()) Text("Digite o texto", style = Type.Body.copy(fontSize = 16.sp, color = Palette.TextSecondary))
                             inner()
                         }
                         Glyph(
@@ -310,7 +310,7 @@ fun TextPanel(vm: EditorViewModel, clipId: String?, startTab: Int = 3) {
                                 expanded = true
                             },
                             size = 18.dp,
-                            description = "Expand",
+                            description = "Expandir",
                         )
                     }
                 },
@@ -323,7 +323,7 @@ fun TextPanel(vm: EditorViewModel, clipId: String?, startTab: Int = 3) {
                     vm.panel = null
                 },
                 contentAlignment = Alignment.Center,
-            ) { Glyph(LucideIcons.Check, Palette.DockText, size = 26.dp, description = "Done") }
+            ) { Glyph(LucideIcons.Check, Palette.DockText, size = 26.dp, description = "Concluído") }
         }
         // the sheet's handle
         Box(Modifier.align(Alignment.CenterHorizontally).padding(vertical = 6.dp).size(36.dp, 4.dp).clip(RoundedCornerShape(2.dp)).background(Color(0xFF555555)))
@@ -345,7 +345,7 @@ fun TextPanel(vm: EditorViewModel, clipId: String?, startTab: Int = 3) {
                     contentAlignment = Alignment.Center,
                 ) { if (toAll) Box(Modifier.size(7.dp).clip(CircleShape).background(Color.Black)) }
                 Spacer(Modifier.width(8.dp))
-                Text("Apply to all captions", style = Type.Small.copy(color = Palette.Text))
+                Text("Aplicar a todas as legendas", style = Type.Small.copy(color = Palette.Text))
             }
         }
         if (tab != 0) {
@@ -407,7 +407,7 @@ fun TextPanel(vm: EditorViewModel, clipId: String?, startTab: Int = 3) {
                                             verticalArrangement = Arrangement.Center,
                                         ) {
                                             Glyph(LucideIcons.Plus, Palette.Text, size = 16.dp)
-                                            Text("Import", style = Type.Small.copy(color = Palette.Text, fontSize = 11.sp))
+                                            Text("Importar", style = Type.Small.copy(color = Palette.Text, fontSize = 11.sp))
                                         }
                                         return@forEach
                                     }
@@ -447,7 +447,7 @@ fun TextPanel(vm: EditorViewModel, clipId: String?, startTab: Int = 3) {
                     5 -> {
                         val made = id
                         if (made == null) {
-                            Text("Type the words first, then choose how they come and go.", style = Type.Small, modifier = Modifier.padding(top = 16.dp))
+                            Text("Digite as palavras primeiro e escolha como elas entram e saem.", style = Type.Small, modifier = Modifier.padding(top = 16.dp))
                         } else {
                             AnimationChoices(vm, made)
                         }
@@ -492,7 +492,7 @@ internal fun FullTextEditor(start: String, onBack: () -> Unit, onDone: (String) 
         Column(Modifier.fillMaxSize().background(Color(0xFF1E1E1E)).statusBarsPadding().navigationBarsPadding().imePadding()) {
             Row(Modifier.fillMaxWidth().height(52.dp).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(44.dp).clickable(onClick = onBack), contentAlignment = Alignment.Center) {
-                    Glyph(LucideIcons.ChevronLeft, Palette.Text, size = 26.dp, description = "Back")
+                    Glyph(LucideIcons.ChevronLeft, Palette.Text, size = 26.dp, description = "Voltar")
                 }
                 Spacer(Modifier.weight(1f))
                 Box(
@@ -501,14 +501,14 @@ internal fun FullTextEditor(start: String, onBack: () -> Unit, onDone: (String) 
                         words = back.removeAt(back.lastIndex)
                     },
                     contentAlignment = Alignment.Center,
-                ) { Glyph(LucideIcons.Undo2, if (back.isNotEmpty()) Palette.Text else Palette.Disabled, size = 22.dp, description = "Undo") }
+                ) { Glyph(LucideIcons.Undo2, if (back.isNotEmpty()) Palette.Text else Palette.Disabled, size = 22.dp, description = "Desfazer") }
                 Box(
                     Modifier.size(40.dp).clickable(enabled = ahead.isNotEmpty()) {
                         back.add(words)
                         words = ahead.removeAt(ahead.lastIndex)
                     },
                     contentAlignment = Alignment.Center,
-                ) { Glyph(LucideIcons.Redo2, if (ahead.isNotEmpty()) Palette.Text else Palette.Disabled, size = 22.dp, description = "Redo") }
+                ) { Glyph(LucideIcons.Redo2, if (ahead.isNotEmpty()) Palette.Text else Palette.Disabled, size = 22.dp, description = "Refazer") }
                 Spacer(Modifier.width(8.dp))
                 Text(
                     "Done",
@@ -757,7 +757,7 @@ private fun wornSignature(vm: EditorViewModel, clipId: String, style: JSONObject
 @Composable
 private fun WordArtTab(vm: EditorViewModel, clipId: String?, style: JSONObject, change: (String?, JSONObject.() -> Unit) -> Unit) {
     val made = clipId ?: run {
-        Text("Type the words first, then give them an effect.", style = Type.Small, modifier = Modifier.padding(16.dp))
+        Text("Digite as palavras primeiro e aplique um efeito.", style = Type.Small, modifier = Modifier.padding(16.dp))
         return
     }
     val context = androidx.compose.ui.platform.LocalContext.current
@@ -803,7 +803,7 @@ private fun WordArtTab(vm: EditorViewModel, clipId: String?, style: JSONObject, 
 
     KindsRow(WORD_ART_KINDS, kind, query, { kind = it; keptTab = false }, { query = it }, "Search effects", keptTab) { keptTab = true }
     if (keptTab && shown.isEmpty()) {
-        Text("Press and hold one to keep it here", style = Type.Small, modifier = Modifier.padding(vertical = 24.dp))
+        Text("Toque e segure para salvar aqui", style = Type.Small, modifier = Modifier.padding(vertical = 24.dp))
     }
     val none = if (words.isEmpty() && !keptTab) 1 else 0
     Column(Modifier.padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -822,7 +822,7 @@ private fun WordArtTab(vm: EditorViewModel, clipId: String?, style: JSONObject, 
                                 onClick = { wear(look) },
                                 onLongClick = {
                                     if (look != null) {
-                                        vm.message = if (Favorites.toggle(context, "wordart", look.name)) "Added to favorites" else "Removed from favorites"
+                                        vm.message = if (Favorites.toggle(context, "wordart", look.name)) "Adicionado aos favoritos" else "Removido dos favoritos"
                                     }
                                 },
                             ),
@@ -960,7 +960,7 @@ private fun TemplatesTab(style: JSONObject, onKept: (Boolean) -> Unit, onPick: (
     }
     KindsRow(TEMPLATE_KINDS, kind, query, { kind = it; keptTab = false }, { query = it }, "Search templates", keptTab) { keptTab = true }
     if (keptTab && shown.isEmpty()) {
-        Text("Press and hold one to keep it here", style = Type.Small, modifier = Modifier.padding(vertical = 24.dp))
+        Text("Toque e segure para salvar aqui", style = Type.Small, modifier = Modifier.padding(vertical = 24.dp))
     }
     Column(Modifier.padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         shown.chunked(4).forEach { row ->
@@ -983,7 +983,7 @@ private fun TemplatesTab(style: JSONObject, onKept: (Boolean) -> Unit, onPick: (
                         contentAlignment = Alignment.Center,
                     ) {
                         if (t === DEFAULT_TEMPLATE) {
-                            Text("Default", style = Type.Body.copy(color = Palette.Text, fontSize = 15.sp))
+                            Text("Padrão", style = Type.Body.copy(color = Palette.Text, fontSize = 15.sp))
                             return@Box
                         }
                         if (t.key in kept) {
@@ -1058,7 +1058,7 @@ private fun KindsRow(
         Box(Modifier.padding(horizontal = 8.dp).size(1.dp, 16.dp).background(Color(0xFF444444)))
         // the ones kept by a long press
         Box(Modifier.padding(end = 10.dp).size(28.dp).clickable(onClick = onKept), contentAlignment = Alignment.Center) {
-            Glyph(LucideIcons.Bookmark, if (keptOn) Palette.Text else Palette.TextSecondary, size = 17.dp, description = "Favorites")
+            Glyph(LucideIcons.Bookmark, if (keptOn) Palette.Text else Palette.TextSecondary, size = 17.dp, description = "Favoritos")
         }
         Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(18.dp)) {
             kinds.forEachIndexed { i, name ->
@@ -1249,7 +1249,7 @@ private fun StylesTab(
     }
     Spacer(Modifier.height(4.dp))
     if (part in setOf(2, 4, 5) && clipId == null) {
-        Text("Type the words first, then give them this.", style = Type.Small, modifier = Modifier.padding(top = 12.dp))
+        Text("Digite as palavras primeiro para aplicar isto.", style = Type.Small, modifier = Modifier.padding(top = 12.dp))
         return
     }
     when (part) {
@@ -1261,7 +1261,7 @@ private fun StylesTab(
                 label = { "${it.toInt()}" },
                 onChange = { v -> change("text-size") { put("fontSize", v / 1000.0) } },
                 onDone = { vm.endGesture() },
-                title = "Size",
+                title = "Tamanho",
             )
             ValueSlider(
                 value = (style.optDouble("opacity", 1.0) * 100).toFloat(),
@@ -1269,7 +1269,7 @@ private fun StylesTab(
                 label = { "${it.toInt()}" },
                 onChange = { v -> change("text-opacity") { put("opacity", v / 100.0) } },
                 onDone = { vm.endGesture() },
-                title = "Opacity",
+                title = "Opacidade",
             )
         }
         1 -> {
@@ -1290,7 +1290,7 @@ private fun StylesTab(
                 label = { "${it.toInt()}" },
                 onChange = { v -> change("text-stroke") { put("strokeWidth", v / 100.0 * MAX_STROKE) } },
                 onDone = { vm.endGesture() },
-                title = "Thickness",
+                title = "Espessura",
             )
         }
         2 -> GlowPart(vm, clipId ?: return)
@@ -1310,7 +1310,7 @@ private fun StylesTab(
                         change("text-plate-opacity") { put("background", hex + "%02x".format((v / 100f * 255).toInt().coerceIn(0, 255))) }
                     },
                     onDone = { vm.endGesture() },
-                    title = "Opacity",
+                    title = "Opacidade",
                 )
                 ValueSlider(
                     value = (style.optDouble("backgroundRadius", 0.0135) / MAX_RADIUS * 100).toFloat().coerceIn(0f, 100f),
@@ -1318,7 +1318,7 @@ private fun StylesTab(
                     label = { "${it.toInt()}" },
                     onChange = { v -> change("text-plate-radius") { put("backgroundRadius", v / 100.0 * MAX_RADIUS) } },
                     onDone = { vm.endGesture() },
-                    title = "Round",
+                    title = "Arredondamento",
                 )
                 // the air between the words and the plate's sides, and above and below them
                 ValueSlider(
@@ -1327,7 +1327,7 @@ private fun StylesTab(
                     label = { "${it.toInt()}" },
                     onChange = { v -> change("text-plate-width") { put("backgroundPaddingX", v / 100.0 * MAX_PAD_X) } },
                     onDone = { vm.endGesture() },
-                    title = "Width",
+                    title = "Largura",
                 )
                 ValueSlider(
                     value = (style.optDouble("backgroundPaddingY", 0.018) / MAX_PAD_Y * 100).toFloat().coerceIn(0f, 100f),
@@ -1335,7 +1335,7 @@ private fun StylesTab(
                     label = { "${it.toInt()}" },
                     onChange = { v -> change("text-plate-height") { put("backgroundPaddingY", v / 100.0 * MAX_PAD_Y) } },
                     onDone = { vm.endGesture() },
-                    title = "Height",
+                    title = "Altura",
                 )
             }
         }
@@ -1365,7 +1365,7 @@ private fun StylesTab(
                 label = { "${it.toInt()}" },
                 onChange = { v -> change("text-tracking") { put("tracking", v / 1000.0) } },
                 onDone = { vm.endGesture() },
-                title = "Character",
+                title = "Caracteres",
             )
             ValueSlider(
                 value = (style.optDouble("lineHeight", 1.2) * 10).toFloat().coerceIn(6f, 30f),
@@ -1373,7 +1373,7 @@ private fun StylesTab(
                 label = { "%.1f".format(it / 10f) },
                 onChange = { v -> change("text-leading") { put("lineHeight", v / 10.0) } },
                 onDone = { vm.endGesture() },
-                title = "Line",
+                title = "Linha",
             )
         }
         7 -> Row(Modifier.padding(vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1439,7 +1439,7 @@ private fun GlowPart(vm: EditorViewModel, clipId: String) {
         label = { "${it.toInt()}" },
         onChange = { v -> glowWith("text-glow-strength") { put("strength", v.toInt()) } },
         onDone = { vm.endGesture() },
-        title = "Intensity",
+        title = "Intensidade",
     )
     ValueSlider(
         value = glow.optDouble("range", 50.0).toFloat(),
@@ -1447,7 +1447,7 @@ private fun GlowPart(vm: EditorViewModel, clipId: String) {
         label = { "${it.toInt()}" },
         onChange = { v -> glowWith("text-glow-range") { put("range", v.toInt()) } },
         onDone = { vm.endGesture() },
-        title = "Range",
+        title = "Alcance",
     )
 }
 
@@ -1489,7 +1489,7 @@ private fun ShadowPart(vm: EditorViewModel, clipId: String, style: JSONObject, c
         label = { "${it.toInt()}" },
         onChange = { v -> shadowWith("text-shadow-opacity") { put("opacity", v.toInt()) } },
         onDone = { vm.endGesture() },
-        title = "Opacity",
+        title = "Opacidade",
     )
     ValueSlider(
         value = now.optDouble("blur", 20.0).toFloat(),
@@ -1497,7 +1497,7 @@ private fun ShadowPart(vm: EditorViewModel, clipId: String, style: JSONObject, c
         label = { "${it.toInt()}" },
         onChange = { v -> shadowWith("text-shadow-blur") { put("blur", v.toInt()) } },
         onDone = { vm.endGesture() },
-        title = "Blur",
+        title = "Desfoque",
     )
     ValueSlider(
         value = now.optDouble("distance", 20.0).toFloat(),
@@ -1505,7 +1505,7 @@ private fun ShadowPart(vm: EditorViewModel, clipId: String, style: JSONObject, c
         label = { "${it.toInt()}" },
         onChange = { v -> shadowWith("text-shadow-distance") { put("distance", v.toInt()) } },
         onDone = { vm.endGesture() },
-        title = "Distance",
+        title = "Distância",
     )
     ValueSlider(
         value = now.optDouble("angle", 45.0).toFloat(),
@@ -1513,7 +1513,7 @@ private fun ShadowPart(vm: EditorViewModel, clipId: String, style: JSONObject, c
         label = { "${it.toInt()}°" },
         onChange = { v -> shadowWith("text-shadow-angle") { put("angle", v.toInt()) } },
         onDone = { vm.endGesture() },
-        title = "Angle",
+        title = "Ângulo",
     )
 }
 
@@ -1532,7 +1532,7 @@ private fun CurvePart(vm: EditorViewModel, clipId: String) {
         label = { "${it.toInt()}" },
         onChange = { v -> setStyle(vm, clipId, CURVE, JSONObject().put("bend", v.toInt()), "text-curve") },
         onDone = { vm.endGesture() },
-        title = "Intensity",
+        title = "Intensidade",
     )
 }
 
@@ -1625,11 +1625,11 @@ internal fun SwatchRow(selected: String?, allowNone: Boolean = false, vm: Editor
                         vm.pickColor = null
                     } else {
                         vm.pickColor = { rgb -> onPick(hexOf(rgb)) }
-                        vm.message = "Tap the picture to take a colour from it"
+                        vm.message = "Toque na imagem para escolher uma cor dela"
                     }
                 },
                 contentAlignment = Alignment.Center,
-            ) { Glyph(LucideIcons.Pipette, if (picking) Palette.Black else Palette.Text, size = 15.dp, description = "Pick a colour") }
+            ) { Glyph(LucideIcons.Pipette, if (picking) Palette.Black else Palette.Text, size = 15.dp, description = "Escolher uma cor") }
         }
         Box(
             Modifier.size(28.dp).clip(CircleShape).background(androidx.compose.ui.graphics.Brush.sweepGradient(HUES))

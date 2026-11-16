@@ -326,10 +326,10 @@ fun DrawPanel(vm: EditorViewModel) {
             val file = withContext(Threads.thumbnails) { render(vm.path, t.width.toInt(), t.height.toInt()) }
             Drawing.strokes.clear()
             vm.panel = null
-            if (file == null) vm.message = "Could not keep the drawing" else vm.addDrawing(file)
+            if (file == null) vm.message = "Não foi possível salvar o desenho" else vm.addDrawing(file)
         }
     }
-    PanelFrame("Draw", vm, height = 290.dp, titleOnTop = true, header = {
+    PanelFrame("Desenhar", vm, height = 290.dp, titleOnTop = true, header = {
         Row(Modifier.padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             listOf("Basic", "Pattern").forEachIndexed { i, name ->
                 Text(
@@ -346,7 +346,7 @@ fun DrawPanel(vm: EditorViewModel) {
             Box(
                 Modifier.size(40.dp).clickable(enabled = Drawing.strokes.isNotEmpty()) { Drawing.strokes.removeAt(Drawing.strokes.lastIndex) },
                 contentAlignment = Alignment.Center,
-            ) { Glyph(LucideIcons.Undo2, if (Drawing.strokes.isEmpty()) Palette.Disabled else Palette.DockText, size = 20.dp, description = "Undo the last stroke") }
+            ) { Glyph(LucideIcons.Undo2, if (Drawing.strokes.isEmpty()) Palette.Disabled else Palette.DockText, size = 20.dp, description = "Desfazer o último traço") }
         }
     }, onDone = ::finish) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 14.dp)) {
@@ -379,11 +379,11 @@ fun DrawPanel(vm: EditorViewModel) {
                     Box(
                         Modifier.size(44.dp, 32.dp).background(if (!Drawing.erasing) Color(0xFF4A4A4A) else Color.Transparent).clickable { Drawing.erasing = false },
                         contentAlignment = Alignment.Center,
-                    ) { Glyph(LucideIcons.Pencil, if (!Drawing.erasing) Palette.Accent else Palette.DockText, size = 17.dp, description = "Pen") }
+                    ) { Glyph(LucideIcons.Pencil, if (!Drawing.erasing) Palette.Accent else Palette.DockText, size = 17.dp, description = "Caneta") }
                     Box(
                         Modifier.size(44.dp, 32.dp).background(if (Drawing.erasing) Color(0xFF4A4A4A) else Color.Transparent).clickable { Drawing.erasing = true },
                         contentAlignment = Alignment.Center,
-                    ) { Glyph(LucideIcons.Eraser, if (Drawing.erasing) Palette.Accent else Palette.DockText, size = 17.dp, description = "Eraser") }
+                    ) { Glyph(LucideIcons.Eraser, if (Drawing.erasing) Palette.Accent else Palette.DockText, size = 17.dp, description = "Borracha") }
                 }
             }
             if (setting == 0) {

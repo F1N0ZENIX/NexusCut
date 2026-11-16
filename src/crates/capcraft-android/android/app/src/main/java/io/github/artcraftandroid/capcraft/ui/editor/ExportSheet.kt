@@ -86,7 +86,7 @@ fun ExportSheet(vm: EditorViewModel, onExport: () -> Unit) {
         ) {
             Row(Modifier.fillMaxWidth().height(50.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.weight(1f)) {
-                    Tabs(if (vm.photoTab) listOf("Video", "GIF", "Photo") else listOf("Video", "GIF"), if (vm.exportPhoto) 2 else if (vm.exportGif) 1 else 0) {
+                    Tabs(if (vm.photoTab) listOf("Vídeo", "GIF", "Foto") else listOf("Vídeo", "GIF"), if (vm.exportPhoto) 2 else if (vm.exportGif) 1 else 0) {
                         vm.exportGif = it == 1
                         vm.exportPhoto = it == 2
                     }
@@ -109,22 +109,22 @@ fun ExportSheet(vm: EditorViewModel, onExport: () -> Unit) {
                         .clickable { vm.exportSheet = false; onExport() },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text("Export", style = Type.BodyStrong.copy(color = Palette.OnAccent, fontSize = 15.sp, fontWeight = FontWeight.Medium))
+                    Text("Exportar", style = Type.BodyStrong.copy(color = Palette.OnAccent, fontSize = 15.sp, fontWeight = FontWeight.Medium))
                 }
                 Spacer(Modifier.width(16.dp))
             }
             if (vm.exportGif) {
                 val size = GIF_SIZES.indexOf(vm.gifSize).coerceAtLeast(0)
-                SettingSlider("Resolution", "Smaller files load faster", GIF_SIZES.map { "${it}p" }, size.toFloat()) {
+                SettingSlider("Resolução", "Arquivos menores carregam mais rápido", GIF_SIZES.map { "${it}p" }, size.toFloat()) {
                     vm.gifSize = GIF_SIZES[it.roundToInt().coerceIn(0, GIF_SIZES.size - 1)]
                 }
                 val rate = GIF_RATES.indexOf(vm.gifFps).coerceAtLeast(0)
-                SettingSlider("Frame rate", "More pictures, smoother motion", GIF_RATES.map { "$it" }, rate.toFloat()) {
+                SettingSlider("Taxa de quadros", "Mais quadros, movimento mais suave", GIF_RATES.map { "$it" }, rate.toFloat()) {
                     vm.gifFps = GIF_RATES[it.roundToInt().coerceIn(0, GIF_RATES.size - 1)]
                 }
                 Divider()
                 Text(
-                    "A looping picture without sound",
+                    "Imagem em repetição sem som",
                     style = Type.Small.copy(fontSize = 13.sp),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                 )
@@ -132,26 +132,26 @@ fun ExportSheet(vm: EditorViewModel, onExport: () -> Unit) {
             }
             val res = exportResolutionOf(vm)
             val r = RESOLUTIONS.indexOf(res).coerceAtLeast(0)
-            SettingSlider("Resolution", RESOLUTION_HINTS[r], RESOLUTION_LABELS, r.toFloat()) {
+            SettingSlider("Resolução", RESOLUTION_HINTS[r], RESOLUTION_LABELS, r.toFloat()) {
                 vm.exportResolution = RESOLUTIONS[it.roundToInt().coerceIn(0, RESOLUTIONS.size - 1)]
             }
             if (vm.exportPhoto) {
                 Divider()
                 Text(
-                    "The picture under the playhead, saved as a photo",
+                    "O quadro no indicador de reprodução, salvo como foto",
                     style = Type.Small.copy(fontSize = 13.sp),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                 )
                 return@Column
             }
             val f = FRAME_RATES.indexOf(vm.exportFps).coerceAtLeast(2)
-            SettingSlider("Frame rate", if (vm.exportFps >= 50) "Very smooth motion" else "Steady, everyday motion", FRAME_RATES.map { "$it" }, f.toFloat()) {
+            SettingSlider("Taxa de quadros", if (vm.exportFps >= 50) "Movimento muito suave" else "Movimento suave para o dia a dia", FRAME_RATES.map { "$it" }, f.toFloat()) {
                 vm.exportFps = FRAME_RATES[it.roundToInt().coerceIn(0, FRAME_RATES.size - 1)]
             }
             val dims = exportSize(t.width, t.height, res.toUInt())
             val suggested = (suggestedBitrateKbps(dims[0], dims[1], vm.exportFps.toUInt()).toInt() / 1000.0).roundToInt().coerceAtLeast(1)
             val mbps = vm.exportMbps ?: suggested
-            SettingSlider("Bitrate (Mbps)", "Suggested for this video: $suggested", MBPS.map { "$it" }, mbpsToPosition(mbps), continuous = true) {
+            SettingSlider("Bitrate (Mbps)", "Sugerido para este vídeo: $suggested", MBPS.map { "$it" }, mbpsToPosition(mbps), continuous = true) {
                 val chosen = positionToMbps(it)
                 // the suggestion is sticky, so it can be found again
                 vm.exportMbps = if (abs(chosen - suggested) <= max(1, suggested / 10)) null else chosen
@@ -160,7 +160,7 @@ fun ExportSheet(vm: EditorViewModel, onExport: () -> Unit) {
             val kbps = exportKbps(vm, dims[0].toInt(), dims[1].toInt())
             val mb = (kbps + 128) / 8.0 / 1000.0 * (t.durationUs / 1e6)
             Text(
-                "Estimated file size: %s MB".format(if (mb < 10) "%.1f".format(mb) else "${mb.roundToInt()}"),
+                "Tamanho estimado do arquivo: %s MB".format(if (mb < 10) "%.1f".format(mb) else "${mb.roundToInt()}"),
                 style = Type.Small.copy(fontSize = 13.sp),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
@@ -169,11 +169,11 @@ fun ExportSheet(vm: EditorViewModel, onExport: () -> Unit) {
 }
 
 private val RESOLUTION_HINTS = listOf(
-    "Small file for quick sharing",
-    "Good for most sharing",
-    "Sharp on any phone",
-    "Extra sharp on big screens",
-    "The finest detail, the biggest file",
+    "Arquivo pequeno para compartilhar rapidamente",
+    "Ideal para a maioria dos compartilhamentos",
+    "Nítido em qualquer celular",
+    "Mais nitidez em telas grandes",
+    "Mais detalhes, arquivo maior",
 )
 
 @Composable

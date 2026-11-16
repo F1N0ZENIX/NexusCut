@@ -167,13 +167,13 @@ fun RemoveBgPanel(vm: EditorViewModel) {
             runCatching { s.removeBackground(clip.id, !wasOn, listener) }
                 .onFailure { e -> withContext(Dispatchers.Main) { vm.message = e.userMessage; vm.panel = null } }
         }
-        if (wasOn) vm.message = "Background restored"
+        if (wasOn) vm.message = "Fundo restaurado"
     }
     fun stop() {
         vm.session?.let { s -> scope.launch(Threads.commands) { runCatching { s.cancelBackground() } } }
         vm.panel = null
     }
-    PanelFrame("Auto removal", vm, height = 150.dp, onDone = ::stop) {
+    PanelFrame("Remoção automática", vm, height = 150.dp, onDone = ::stop) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 14.dp)) {
             val p = progress
             if (p != null && !wasOn) {
@@ -279,7 +279,7 @@ fun ChromaPanel(vm: EditorViewModel) {
                 contentAlignment = Alignment.Center,
             ) { Glyph(LucideIcons.Crosshair, if (picking || chroma != null) Palette.Accent else Palette.DockText, size = 22.dp) }
             Spacer(Modifier.height(6.dp))
-            Text("Color picker", style = Type.Small.copy(fontSize = 12.sp, color = if (picking || chroma != null) Palette.Accent else Palette.TextSecondary))
+            Text("Seletor de cores", style = Type.Small.copy(fontSize = 12.sp, color = if (picking || chroma != null) Palette.Accent else Palette.TextSecondary))
         }
         Spacer(Modifier.height(12.dp))
         val on = chroma != null

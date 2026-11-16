@@ -403,7 +403,7 @@ internal fun addSoundFx(vm: EditorViewModel, name: String, scope: kotlinx.corout
                 File(dir, "${fx.name}.wav").also { if (!it.exists()) writeWav(it, render(fx)) }
             }.getOrNull()
         }
-        if (file == null) vm.message = "Could not make that sound" else placeFx(vm, file, fx.name)
+        if (file == null) vm.message = "Não foi possível criar esse som" else placeFx(vm, file, fx.name)
     }
 }
 
@@ -485,11 +485,11 @@ fun SoundFxPanel(vm: EditorViewModel) {
                     File(dir, "${fx.name}.wav").also { if (!it.exists()) writeWav(it, render(fx)) }
                 }.getOrNull()
             }
-            if (file == null) vm.message = "Could not make that sound" else placeFx(vm, file, fx.name)
+            if (file == null) vm.message = "Não foi possível criar esse som" else placeFx(vm, file, fx.name)
         }
     }
 
-    PanelFrame("Sound FX", vm, tall = true, titleOnTop = true, header = { SearchField(query, { query = it }, "Search sound effects") }) {
+    PanelFrame("Efeitos sonoros", vm, tall = true, titleOnTop = true, header = { SearchField(query, { query = it }, "Search sound effects") }) {
         Tabs(categories, if (query.isBlank()) category else -1) {
             category = it
             query = ""

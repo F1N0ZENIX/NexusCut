@@ -237,7 +237,7 @@ fun StickersPanel(vm: EditorViewModel) {
             if (file != null) vm.addSticker(file)
         }
     }
-    PanelFrame("Stickers", vm, tall = true, titleOnTop = true, header = { SearchField(query, { query = it }, "Search stickers") }) {
+    PanelFrame("Figurinhas", vm, tall = true, titleOnTop = true, header = { SearchField(query, { query = it }, "Search stickers") }) {
         Row(
             Modifier.fillMaxWidth().height(48.dp).horizontalScroll(rememberScrollState()).padding(horizontal = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -248,12 +248,12 @@ fun StickersPanel(vm: EditorViewModel) {
                     photo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 },
                 contentAlignment = Alignment.Center,
-            ) { Glyph(LucideIcons.ImagePlus, Palette.DockText, size = 22.dp, description = "A photo of your own") }
+            ) { Glyph(LucideIcons.ImagePlus, Palette.DockText, size = 22.dp, description = "Uma foto sua") }
             Box(
                 Modifier.size(38.dp).clip(RoundedCornerShape(10.dp)).background(if (query.isBlank() && shelf == -1) Color(0xFF3A3A3A) else Color.Transparent)
                     .clickable { shelf = -1; query = "" },
                 contentAlignment = Alignment.Center,
-            ) { Glyph(LucideIcons.Bookmark, Palette.DockText, size = 21.dp, description = "Favorites") }
+            ) { Glyph(LucideIcons.Bookmark, Palette.DockText, size = 21.dp, description = "Favoritos") }
             SHELVES.forEachIndexed { i, s ->
                 val on = query.isBlank() && i == shelf
                 Box(
@@ -273,7 +273,7 @@ fun StickersPanel(vm: EditorViewModel) {
             SHELVES.flatMap { it.stickers }.filter { s -> s.words.split(' ').any { it.startsWith(q) } }
         }
         if (shown.isEmpty()) {
-            Text(if (shelf == -1 && query.isBlank()) "Press and hold one to keep it here" else "No stickers found", style = Type.Small, modifier = Modifier.padding(24.dp))
+            Text(if (shelf == -1 && query.isBlank()) "Toque e segure para salvar aqui" else "Nenhuma figurinha encontrada", style = Type.Small, modifier = Modifier.padding(24.dp))
         }
         ChoiceGrid(shown.size, Modifier.weight(1f)) { i ->
             val s = shown[i]
@@ -281,7 +281,7 @@ fun StickersPanel(vm: EditorViewModel) {
                 Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(8.dp)).background(Color(0xFF333333))
                     .combinedClickable(
                         onClick = { add(s) },
-                        onLongClick = { vm.message = if (Favorites.toggle(context, "sticker", s.key)) "Added to favorites" else "Removed from favorites" },
+                        onLongClick = { vm.message = if (Favorites.toggle(context, "sticker", s.key)) "Adicionado aos favoritos" else "Removido dos favoritos" },
                     ),
                 contentAlignment = Alignment.Center,
             ) {

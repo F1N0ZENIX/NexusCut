@@ -186,30 +186,30 @@ private class Shortcut(val id: String, val label: String, val icon: ImageVector,
  */
 private val SHORTCUTS = listOf(
     Shortcut("autocut", "AutoCut", LucideIcons.Clapperboard, videoOnly = false),
-    Shortcut("retouch", "Retouch", LucideIcons.Smile, videoOnly = false),
-    Shortcut("phototools", "Photo tools", LucideIcons.Image, videoOnly = false),
-    Shortcut("camera", "Shoot and record", LucideIcons.Camera),
-    Shortcut("enhance", "Auto enhance", LucideIcons.WandSparkles, videoOnly = false),
-    Shortcut("cover", "Cover maker", LucideIcons.ImagePlay),
-    Shortcut("captions", "Auto captions", LucideIcons.Captions),
-    Shortcut("removebg", "Remove background", LucideIcons.UserRoundX, videoOnly = false),
-    Shortcut("speed", "Adjust speed", LucideIcons.Gauge),
-    Shortcut("audiotools", "Audio tools", LucideIcons.AudioLines),
+    Shortcut("retouch", "Retocar", LucideIcons.Smile, videoOnly = false),
+    Shortcut("phototools", "Ferramentas de foto", LucideIcons.Image, videoOnly = false),
+    Shortcut("camera", "Filmar e gravar", LucideIcons.Camera),
+    Shortcut("enhance", "Melhoria automática", LucideIcons.WandSparkles, videoOnly = false),
+    Shortcut("cover", "Criar capa", LucideIcons.ImagePlay),
+    Shortcut("captions", "Legendas automáticas", LucideIcons.Captions),
+    Shortcut("removebg", "Remover fundo", LucideIcons.UserRoundX, videoOnly = false),
+    Shortcut("speed", "Ajustar velocidade", LucideIcons.Gauge),
+    Shortcut("audiotools", "Ferramentas de áudio", LucideIcons.AudioLines),
 )
 
 /** Photo tools' list: each a tool, with what it does in a line. */
 private val PHOTO_TOOLS = listOf(
-    Triple("collage", "Collage", "Lay two to nine photos or videos out together."),
-    Triple("lighting", "Smart lighting", "Brighten a dark photo in one tap."),
-    Triple("framecapture", "Frame capture", "Keep a still from a video as a photo."),
+    Triple("collage", "Collage", "Organize de duas a nove fotos ou vídeos juntos."),
+    Triple("lighting", "Iluminação inteligente", "Clareie uma foto escura com um toque."),
+    Triple("framecapture", "Capturar quadro", "Salve um quadro do vídeo como foto."),
 )
 
 /** Audio tools' list: each a tool the picked video opens on, with what it does in a line. */
 private val AUDIO_TOOLS = listOf(
-    Triple("record", "Record", "Speak over a video as it plays."),
-    Triple("noise", "Reduce noise", "Quiet the hiss and hum behind a voice."),
-    Triple("enhancevoice", "Enhance voice", "Make a voice clearer and closer."),
-    Triple("extract", "Extract audio", "Take a video's sound out as a clip of its own."),
+    Triple("record", "Gravar", "Narre enquanto o vídeo é reproduzido."),
+    Triple("noise", "Reduzir ruído", "Reduza o chiado e o ruído atrás da voz."),
+    Triple("enhancevoice", "Melhorar voz", "Deixe a voz mais clara e próxima."),
+    Triple("extract", "Extrair áudio", "Extraia o som de um vídeo como um clipe separado."),
 )
 
 @Composable
@@ -335,7 +335,7 @@ fun HomeScreen(
         capture = uri
         runCatching { camera.launch(uri) }.onFailure {
             capture = null
-            message = "There is no camera app to record with"
+            message = "Não há aplicativo de câmera disponível para gravar"
         }
     }
 
@@ -417,13 +417,13 @@ fun HomeScreen(
         }
 
         if (audioTools) {
-            ToolsSheet("Audio tools", AUDIO_TOOLS, onClose = { audioTools = false }) { id ->
+            ToolsSheet("Ferramentas de áudio", AUDIO_TOOLS, onClose = { audioTools = false }) { id ->
                 audioTools = false
                 shortcut(id, videoOnly = true)
             }
         }
         if (photoTools) {
-            ToolsSheet("Photo tools", PHOTO_TOOLS, onClose = { photoTools = false }) { id ->
+            ToolsSheet("Ferramentas de foto", PHOTO_TOOLS, onClose = { photoTools = false }) { id ->
                 photoTools = false
                 val kinds = when (id) {
                     "collage" -> io.github.artcraftandroid.capcraft.ui.common.MediaKinds.BOTH
@@ -439,15 +439,15 @@ fun HomeScreen(
         if (deletingMany) {
             val picked = managing.orEmpty()
             HomeConfirm(
-                text = "Move ${picked.size} project${if (picked.size == 1) "" else "s"} to the Trash? They're kept there for 30 days.",
-                confirm = "Move",
+                text = "Mover ${picked.size} projeto${if (picked.size == 1) "" else "s"} para a lixeira? ${if (picked.size == 1) "Ficará" else "Ficarão"} lá por 30 dias.",
+                confirm = "Mover",
                 onDismiss = { deletingMany = false },
             ) {
                 deletingMany = false
                 managing = null
                 scope.launch {
                     withContext(Threads.commands) { picked.forEach { runCatching { trashProject(it) } } }
-                    message = "Moved to the Trash"
+                    message = "Movido para a lixeira"
                     refresh++
                 }
             }
@@ -480,14 +480,14 @@ fun HomeScreen(
         }
         deleting?.let { p ->
             HomeConfirm(
-                text = "Move this project to the Trash? It's kept there for 30 days.",
-                confirm = "Move",
+                text = "Mover este projeto para a lixeira? Ele fica lá por 30 dias.",
+                confirm = "Mover",
                 onDismiss = { deleting = null },
             ) {
                 deleting = null
                 scope.launch {
                     runCatching { withContext(Threads.commands) { trashProject(p.path) } }
-                        .onSuccess { message = "Moved to the Trash" }
+                        .onSuccess { message = "Movido para a lixeira" }
                         .onFailure { message = it.userMessage }
                     refresh++
                 }
@@ -501,7 +501,7 @@ fun HomeScreen(
                     trashMenu = null
                     scope.launch {
                         runCatching { withContext(Threads.commands) { restoreProject(p.path) } }
-                            .onSuccess { message = "Restored" }
+                            .onSuccess { message = "Restaurado" }
                             .onFailure { message = it.userMessage }
                         refresh++
                     }
@@ -511,8 +511,8 @@ fun HomeScreen(
         }
         purging?.let { p ->
             HomeConfirm(
-                text = "Delete this project for good? This can't be undone.",
-                confirm = "Delete",
+                text = "Excluir este projeto definitivamente? Isso não pode ser desfeito.",
+                confirm = "Excluir",
                 onDismiss = { purging = null },
             ) {
                 purging = null
@@ -550,15 +550,15 @@ private fun EditTab(
                     Text("NexusCut", style = ink(18f, FontWeight.Bold, Color.White))
                     Spacer(Modifier.weight(1f))
                     Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).clickable(onClick = onSearch), contentAlignment = Alignment.Center) {
-                        Glyph(LucideIcons.Search, Color.White, size = 24.dp, description = "Search projects")
+                        Glyph(LucideIcons.Search, Color.White, size = 24.dp, description = "Buscar projetos")
                     }
                 }
                 Spacer(Modifier.height(176.dp))
                 Column(Modifier.padding(horizontal = 16.dp).clickable(onClick = onNewVideo)) {
-                    Text("Ready when you are", style = ink(14f, color = Color.White.copy(alpha = 0.92f)))
+                    Text("Tudo pronto para começar", style = ink(14f, color = Color.White.copy(alpha = 0.92f)))
                     Spacer(Modifier.height(2.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Make your next video", style = ink(21f, FontWeight.Bold, Color.White))
+                        Text("Crie seu próximo vídeo", style = ink(21f, FontWeight.Bold, Color.White))
                         Spacer(Modifier.width(6.dp))
                         Box(Modifier.size(18.dp).clip(RoundedCornerShape(4.dp)).background(Color.White.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) {
                             Glyph(LucideIcons.ChevronRight, Color.White, size = 14.dp)
@@ -567,10 +567,10 @@ private fun EditTab(
                 }
                 Spacer(Modifier.height(16.dp))
                 Row(Modifier.fillMaxWidth().height(112.dp).padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    CreateCard("New video", Modifier.weight(1.7f), onNewVideo) {
+                    CreateCard("Novo vídeo", Modifier.weight(1.7f), onNewVideo) {
                         Glyph(LucideIcons.Plus, Home.OnInk, size = 18.dp)
                     }
-                    CreateCard("Edit photo", Modifier.weight(1f), onCaptions) {
+                    CreateCard("Editar foto", Modifier.weight(1f), onCaptions) {
                         Glyph(LucideIcons.Image, Home.OnInk, size = 16.dp)
                     }
                 }
@@ -591,7 +591,7 @@ private fun EditTab(
                     Modifier.align(Alignment.CenterEnd).padding(end = 16.dp).size(46.dp, 70.dp)
                         .clip(RoundedCornerShape(6.dp)).background(Home.More).clickable(onClick = onAllProjects),
                     contentAlignment = Alignment.Center,
-                ) { Glyph(LucideIcons.ChevronRight, Color.White, size = 24.dp, description = "All projects") }
+                ) { Glyph(LucideIcons.ChevronRight, Color.White, size = 24.dp, description = "Todos os projetos") }
             }
             Spacer(Modifier.height(12.dp))
         }
@@ -661,7 +661,7 @@ private fun ToolsSheet(title: String, tools: List<Triple<String, String, String>
             Box(
                 Modifier.size(52.dp).clip(androidx.compose.foundation.shape.CircleShape).background(Home.Round).clickable(onClick = onClose),
                 contentAlignment = Alignment.Center,
-            ) { Glyph(LucideIcons.X, Home.Ink, size = 20.dp, description = "Close") }
+            ) { Glyph(LucideIcons.X, Home.Ink, size = 20.dp, description = "Fechar") }
         }
     }
 }
@@ -720,7 +720,7 @@ private fun StripTile(p: ProjectSummary, onClick: () -> Unit) {
         Row(Modifier.align(Alignment.BottomStart).padding(horizontal = 5.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             Glyph(if (isPhoto(p)) LucideIcons.Image else LucideIcons.Scissors, Color.White, size = 10.dp)
             Spacer(Modifier.width(3.dp))
-            Text(p.name.ifBlank { "Untitled" }, style = ink(10.5f, FontWeight.Medium, Color.White), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(p.name.ifBlank { "Sem título" }, style = ink(10.5f, FontWeight.Medium, Color.White), maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }
@@ -778,7 +778,7 @@ private fun ProjectsTab(
                         Glyph(LucideIcons.Search, Home.Muted, size = 18.dp)
                         Spacer(Modifier.width(8.dp))
                         Box(Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
-                            if (query.isEmpty()) Text("Search projects", style = ink(15f, color = Home.Muted))
+                            if (query.isEmpty()) Text("Buscar projetos", style = ink(15f, color = Home.Muted))
                             BasicTextField(
                                 value = query,
                                 onValueChange = { query = it },
@@ -790,20 +790,20 @@ private fun ProjectsTab(
                         }
                     }
                     Text(
-                        "Cancel",
+                        "Cancelar",
                         style = ink(15f),
                         modifier = Modifier.clickable { query = ""; onSearching(false) }.padding(horizontal = 10.dp, vertical = 8.dp),
                     )
                 } else {
-                    Text("Projects", style = ink(22f, FontWeight.Bold), modifier = Modifier.weight(1f))
+                    Text("Projetos", style = ink(22f, FontWeight.Bold), modifier = Modifier.weight(1f))
                     Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).clickable { onSearching(true) }, contentAlignment = Alignment.Center) {
-                        Glyph(LucideIcons.Search, Home.Ink, size = 24.dp, description = "Search projects")
+                        Glyph(LucideIcons.Search, Home.Ink, size = 24.dp, description = "Buscar projetos")
                     }
                 }
             }
             // the shelves along the top, as the reference has its Local and Trash
             Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
-                listOf("Local" to false, "Trash" to true).forEach { (label, isTrash) ->
+                listOf("Local" to false, "Lixeira" to true).forEach { (label, isTrash) ->
                     val on = showingTrash == isTrash
                     Column(
                         Modifier.clickable { onShowTrash(isTrash) }.padding(horizontal = 10.dp, vertical = 8.dp),
@@ -818,7 +818,7 @@ private fun ProjectsTab(
             Box(Modifier.fillMaxWidth().height(1.dp).background(Home.Hairline))
             if (showingTrash) {
                 Text(
-                    "Projects here are deleted for good after 30 days.",
+                    "Os projetos aqui são excluídos definitivamente após 30 dias.",
                     style = ink(13f, color = Home.Muted),
                     modifier = Modifier.padding(start = 16.dp, top = 10.dp, bottom = 4.dp),
                 )
@@ -826,7 +826,7 @@ private fun ProjectsTab(
                 when {
                     bin == null -> Unit
                     bin.isEmpty() -> Box(Modifier.fillMaxWidth().padding(top = 96.dp), contentAlignment = Alignment.Center) {
-                        Text("The Trash is empty", style = ink(14f, color = Home.Muted))
+                        Text("A lixeira está vazia", style = ink(14f, color = Home.Muted))
                     }
                     else -> LazyColumn(Modifier.fillMaxSize()) {
                         items(bin, key = { it.path }) { p -> ProjectRow(p, ticked = null, onOpen = { onTrashMenu(p) }, onMenu = { onTrashMenu(p) }) }
@@ -836,7 +836,7 @@ private fun ProjectsTab(
             }
             if (!projects.isNullOrEmpty()) {
                 Row(Modifier.fillMaxWidth().padding(start = 16.dp, top = 12.dp, bottom = 2.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf("All", "Video", "Photo").forEachIndexed { i, name ->
+                    listOf("Tudo", "Vídeo", "Foto").forEachIndexed { i, name ->
                         Box(
                             Modifier.height(34.dp).clip(RoundedCornerShape(8.dp))
                                 .border(if (i == kind) 1.5.dp else 1.dp, if (i == kind) Home.Ink else Home.Hairline, RoundedCornerShape(8.dp))
@@ -847,9 +847,9 @@ private fun ProjectsTab(
                 }
                 val count = shown?.size ?: projects.size
                 Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("$count project${if (count == 1) "" else "s"}", style = ink(16f, FontWeight.Medium), modifier = Modifier.weight(1f))
+                    Text("$count projeto${if (count == 1) "" else "s"}", style = ink(16f, FontWeight.Medium), modifier = Modifier.weight(1f))
                     Text(
-                        if (managing == null) "Select" else "Done",
+                        if (managing == null) "Selecionar" else "Concluído",
                         style = ink(15f, color = Home.Muted),
                         modifier = Modifier.clickable { onManaging(if (managing == null) emptySet() else null) }.padding(8.dp),
                     )
@@ -860,7 +860,7 @@ private fun ProjectsTab(
                     CircularProgressIndicator(color = Palette.Accent, modifier = Modifier.size(28.dp), strokeWidth = 2.dp)
                 }
                 shown.isEmpty() -> Box(Modifier.fillMaxWidth().padding(top = 96.dp), contentAlignment = Alignment.Center) {
-                    Text(if (searching && query.isNotBlank()) "No projects found" else "No projects yet", style = ink(14f, color = Home.Muted))
+                    Text(if (searching && query.isNotBlank()) "Nenhum projeto encontrado" else "Nenhum projeto ainda", style = ink(14f, color = Home.Muted))
                 }
                 else -> LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 88.dp)) {
                     items(shown, key = { it.path }) { p ->
@@ -893,7 +893,7 @@ private fun ProjectsTab(
                     Glyph(LucideIcons.Plus, Palette.Accent, size = 16.dp)
                 }
                 Spacer(Modifier.width(8.dp))
-                Text("Create", style = ink(17f, FontWeight.Medium, Color.White))
+                Text("Criar", style = ink(17f, FontWeight.Medium, Color.White))
             }
         }
     }
@@ -918,7 +918,7 @@ private fun ProjectRow(p: ProjectSummary, ticked: Boolean?, onOpen: () -> Unit, 
         }
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
-            Text(p.name.ifBlank { "Untitled" }, style = ink(15f, FontWeight.SemiBold), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(p.name.ifBlank { "Sem título" }, style = ink(15f, FontWeight.SemiBold), maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.height(4.dp))
             Text(stamp(p.modifiedMs), style = ink(13f, color = Home.Muted))
             Spacer(Modifier.height(4.dp))
@@ -936,7 +936,7 @@ private fun ProjectRow(p: ProjectSummary, ticked: Boolean?, onOpen: () -> Unit, 
         }
         if (ticked == null) {
             Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).clickable(onClick = onMenu), contentAlignment = Alignment.Center) {
-                Glyph(LucideIcons.Ellipsis, Home.Muted, size = 20.dp, description = "More")
+                Glyph(LucideIcons.Ellipsis, Home.Muted, size = 20.dp, description = "Mais")
             }
         } else {
             Box(
@@ -970,10 +970,10 @@ private fun SelectBar(all: Boolean, count: Int, onAll: () -> Unit, onDelete: () 
     Column(Modifier.fillMaxWidth().background(Home.Background).navigationBarsPadding()) {
         Box(Modifier.fillMaxWidth().height(1.dp).background(Home.Hairline))
         Row(Modifier.fillMaxWidth().height(56.dp).padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(if (all) "Deselect all" else "Select all", style = ink(15f), modifier = Modifier.clickable(onClick = onAll).padding(8.dp))
+            Text(if (all) "Desmarcar tudo" else "Selecionar tudo", style = ink(15f), modifier = Modifier.clickable(onClick = onAll).padding(8.dp))
             Spacer(Modifier.weight(1f))
             Text(
-                "Delete ($count)",
+                "Excluir ($count)",
                 style = ink(15f, FontWeight.SemiBold, if (count == 0) Home.Muted else Palette.Danger),
                 modifier = Modifier.clickable(enabled = count > 0, onClick = onDelete).padding(8.dp),
             )
@@ -998,9 +998,9 @@ private fun BottomBar(tab: Int, latest: ProjectSummary?, onTab: (Int) -> Unit) {
         Box(Modifier.fillMaxWidth().height(1.dp).background(Home.Hairline))
         Row(Modifier.fillMaxWidth().height(58.dp)) {
             listOf(
-                Triple("Edit", LucideIcons.Scissors, 0),
-                Triple("Projects", LucideIcons.Folder, 1),
-                Triple("Me", LucideIcons.UserRound, 2),
+                Triple("Editar", LucideIcons.Scissors, 0),
+                Triple("Projetos", LucideIcons.Folder, 1),
+                Triple("Eu", LucideIcons.UserRound, 2),
             ).forEach { (label, icon, i) ->
                 val on = tab == i
                 Column(
@@ -1040,19 +1040,19 @@ private fun MeTab(onLicences: () -> Unit, onAbout: () -> Unit, onCleared: (Strin
     LaunchedEffect(Unit) { cache = withContext(Threads.commands) { cacheSize(context) } }
     Column(Modifier.fillMaxSize().statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().height(56.dp).padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("Settings", style = ink(22f, FontWeight.Bold))
+            Text("Configurações", style = ink(22f, FontWeight.Bold))
         }
         Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
-            SettingRow("Clear cache", cache?.let(::size) ?: "") { clearing = true }
-            SettingRow("Licences", null, onLicences)
-            SettingRow("About NexusCut", null, onAbout)
-            SettingRow("Version", version, null)
+            SettingRow("Limpar cache", cache?.let(::size) ?: "") { clearing = true }
+            SettingRow("Licenças", null, onLicences)
+            SettingRow("Sobre o NexusCut", null, onAbout)
+            SettingRow("Versão", version, null)
         }
     }
     if (clearing) {
         HomeConfirm(
-            text = "Clear the cache? Previews and waveforms are made again when needed; projects are kept.",
-            confirm = "Clear",
+            text = "Limpar o cache? Pré-visualizações e formas de onda serão geradas novamente quando necessário; os projetos serão mantidos.",
+            confirm = "Limpar",
             onDismiss = { clearing = false },
         ) {
             clearing = false
@@ -1089,7 +1089,7 @@ private fun Page(title: String, onBack: () -> Unit, content: @Composable () -> U
         Box(Modifier.fillMaxWidth().height(50.dp), contentAlignment = Alignment.Center) {
             Text(title, style = ink(17f, FontWeight.SemiBold))
             Box(Modifier.align(Alignment.CenterStart).padding(start = 4.dp).size(44.dp).clickable(onClick = onBack), contentAlignment = Alignment.Center) {
-                Glyph(LucideIcons.ChevronLeft, Home.Ink, size = 24.dp, description = "Back")
+                Glyph(LucideIcons.ChevronLeft, Home.Ink, size = 24.dp, description = "Voltar")
             }
         }
         content()
@@ -1104,26 +1104,26 @@ private const val SOURCE_URL = "https://github.com/F1N0ZENIX/NexusCut/tree/featu
 private fun AboutScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val version = remember { appVersion(context) }
-    Page("About NexusCut", onBack) {
+    Page("Sobre o NexusCut", onBack) {
         Column(Modifier.fillMaxWidth().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.height(24.dp))
             Text("NexusCut", style = ink(26f, FontWeight.Bold))
             Spacer(Modifier.height(6.dp))
-            Text("Version $version", style = ink(13f, color = Home.Muted))
+            Text("Versão $version", style = ink(13f, color = Home.Muted))
             Spacer(Modifier.height(28.dp))
             Text(
-                "A free video editor that keeps your work on your phone. Based on CapCraft and Concat's engine; free " +
-                    "software under the GNU Affero General Public License, version 3 or later.",
+                "Um editor de vídeo gratuito que mantém seu trabalho no celular. Baseado no CapCraft e no mecanismo do Concat; software " +
+                    "livre sob a Licença Pública Geral GNU Affero, versão 3 ou posterior.",
                 style = ink(13f, color = Home.Muted).copy(textAlign = androidx.compose.ui.text.style.TextAlign.Center),
             )
             Spacer(Modifier.height(16.dp))
             Text(
-                "Not affiliated with or endorsed by ByteDance or CapCut.",
+                "Não é afiliado nem apoiado pela ByteDance ou pelo CapCut.",
                 style = ink(13f, color = Home.Muted).copy(textAlign = androidx.compose.ui.text.style.TextAlign.Center),
             )
             Spacer(Modifier.height(28.dp))
             // the source, as the licence asks of every copy handed on
-            Text("Source code", style = ink(13f, color = Home.Muted))
+            Text("Código-fonte", style = ink(13f, color = Home.Muted))
             Spacer(Modifier.height(4.dp))
             Text(
                 SOURCE_URL.removePrefix("https://"),
@@ -1172,7 +1172,7 @@ private fun LicencesScreen(onBack: () -> Unit) {
         "LICENSE-material-symbols.txt" to "Material Symbols",
     )
     var open by remember { mutableStateOf<String?>(null) }
-    Page(files.firstOrNull { it.first == open }?.second ?: "Licences", onBack = { if (open != null) open = null else onBack() }) {
+    Page(files.firstOrNull { it.first == open }?.second ?: "Licenças", onBack = { if (open != null) open = null else onBack() }) {
         val file = open
         if (file == null) {
             files.forEach { (name, title) ->
@@ -1241,7 +1241,7 @@ private fun TrashSheet(p: ProjectSummary, onDismiss: () -> Unit, onRestore: () -
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text(p.name.ifBlank { "Untitled" }, style = ink(15f, FontWeight.Medium), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(p.name.ifBlank { "Sem título" }, style = ink(15f, FontWeight.Medium), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Spacer(Modifier.height(2.dp))
                     Text(size(p.sizeBytes), style = ink(12f, color = Home.Muted))
                 }
@@ -1269,15 +1269,15 @@ private fun ProjectSheet(p: ProjectSummary, onDismiss: () -> Unit, onRename: () 
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text(p.name.ifBlank { "Untitled" }, style = ink(15f, FontWeight.Medium), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(p.name.ifBlank { "Sem título" }, style = ink(15f, FontWeight.Medium), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Spacer(Modifier.height(2.dp))
-                    Text("${size(p.sizeBytes)} · Updated ${ago(p.modifiedMs)}", style = ink(12f, color = Home.Muted))
+                    Text("${size(p.sizeBytes)} · Atualizado ${ago(p.modifiedMs)}", style = ink(12f, color = Home.Muted))
                 }
             }
             Box(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 4.dp).height(1.dp).background(Home.Hairline))
-            SheetRow(LucideIcons.Pencil, "Rename", onRename)
-            SheetRow(LucideIcons.Copy, "Duplicate", onDuplicate)
-            SheetRow(LucideIcons.Trash2, "Delete", onDelete)
+            SheetRow(LucideIcons.Pencil, "Renomear", onRename)
+            SheetRow(LucideIcons.Copy, "Duplicar", onDuplicate)
+            SheetRow(LucideIcons.Trash2, "Excluir", onDelete)
         }
     }
 }
@@ -1303,9 +1303,9 @@ private fun RenameSheet(current: String, onDismiss: () -> Unit, onDone: (String)
                 .navigationBarsPadding().imePadding().padding(horizontal = 16.dp).padding(bottom = 12.dp),
         ) {
             Box(Modifier.fillMaxWidth().height(50.dp), contentAlignment = Alignment.Center) {
-                Text("Rename", style = ink(16f, FontWeight.Bold))
+                Text("Renomear", style = ink(16f, FontWeight.Bold))
                 Box(Modifier.align(Alignment.CenterEnd).size(40.dp).clickable(onClick = onDismiss), contentAlignment = Alignment.CenterEnd) {
-                    Glyph(LucideIcons.X, Home.Ink, size = 22.dp, description = "Close")
+                    Glyph(LucideIcons.X, Home.Ink, size = 22.dp, description = "Fechar")
                 }
             }
             Row(
@@ -1335,7 +1335,7 @@ private fun RenameSheet(current: String, onDismiss: () -> Unit, onDone: (String)
                     .background(if (ok) Palette.Accent else Palette.Accent.copy(alpha = 0.4f))
                     .clickable(enabled = ok) { onDone(text.text.trim()) },
                 contentAlignment = Alignment.Center,
-            ) { Text("Confirm", style = ink(15f, FontWeight.Medium, Color.White)) }
+            ) { Text("Confirmar", style = ink(15f, FontWeight.Medium, Color.White)) }
         }
     }
 }
@@ -1354,7 +1354,7 @@ private fun HomeConfirm(text: String, confirm: String, onDismiss: () -> Unit, on
                 Box(
                     Modifier.weight(1f).height(44.dp).clip(RoundedCornerShape(6.dp)).background(Home.Field).clickable(onClick = onDismiss),
                     contentAlignment = Alignment.Center,
-                ) { Text("Cancel", style = ink(15f, FontWeight.Medium)) }
+                ) { Text("Cancelar", style = ink(15f, FontWeight.Medium)) }
                 Box(
                     Modifier.weight(1f).height(44.dp).clip(RoundedCornerShape(6.dp)).background(Palette.Accent).clickable(onClick = onConfirm),
                     contentAlignment = Alignment.Center,

@@ -79,7 +79,7 @@ fun SpeedCurveEditor(vm: EditorViewModel, clip: ClipView, start: List<Pair<Doubl
         Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             Row(Modifier.clickable(onClick = onBack).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Glyph(LucideIcons.ChevronLeft, Palette.Text, size = 18.dp)
-                Text("Curves", style = Type.Small.copy(color = Palette.Text))
+                Text("Curvas", style = Type.Small.copy(color = Palette.Text))
             }
             Spacer(Modifier.weight(1f))
             Text("%.1fs → %.1fs".format(sourceSeconds, sourceSeconds / meanOf(points)), style = Type.Small)

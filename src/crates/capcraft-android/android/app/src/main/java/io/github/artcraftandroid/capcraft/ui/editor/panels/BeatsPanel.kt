@@ -81,14 +81,14 @@ fun BeatsPanel(vm: EditorViewModel) {
             }
             finding = false
             when {
-                found == null -> vm.message = "Could not read the sound"
-                found.isEmpty() -> vm.message = "No beats found"
+                found == null -> vm.message = "Não foi possível ler o áudio"
+                found.isEmpty() -> vm.message = "Nenhuma batida encontrada"
                 else -> vm.setBeats(clip.mediaId, found.map { it / 1e6 })
             }
         }
     }
 
-    PanelFrame("Beats", vm, tall = true, titleOnTop = true) {
+    PanelFrame("Batidas", vm, tall = true, titleOnTop = true) {
         Spacer(Modifier.height(14.dp))
         BeatStrip(vm, clip)
         Spacer(Modifier.height(30.dp))
@@ -121,7 +121,7 @@ fun BeatsPanel(vm: EditorViewModel) {
                     if (auto) find(intense) else vm.setBeats(clip.mediaId, null)
                 }
                 Spacer(Modifier.height(8.dp))
-                Text(if (finding) "Listening…" else "Auto-generate", style = Type.Small.copy(color = Palette.Text, fontSize = 13.sp))
+                Text(if (finding) "Ouvindo…" else "Gerar automaticamente", style = Type.Small.copy(color = Palette.Text, fontSize = 13.sp))
             }
             Box(Modifier.width(1.dp).height(52.dp).background(Color(0xFF3A3A3A)))
             Column(Modifier.weight(1f).padding(start = 14.dp)) {
@@ -133,9 +133,9 @@ fun BeatsPanel(vm: EditorViewModel) {
                 }
                 Row(Modifier.fillMaxWidth()) {
                     val tone = if (auto) Palette.Text else Palette.TextSecondary
-                    Text("Light", style = Type.Small.copy(color = tone, fontSize = 13.sp))
+                    Text("Leve", style = Type.Small.copy(color = tone, fontSize = 13.sp))
                     Spacer(Modifier.weight(1f))
-                    Text("Intense", style = Type.Small.copy(color = tone, fontSize = 13.sp))
+                    Text("Intenso", style = Type.Small.copy(color = tone, fontSize = 13.sp))
                 }
             }
         }

@@ -275,11 +275,11 @@ private fun MediaPickerPage(req: MediaRequest, onClose: () -> Unit, onDone: (Lis
     ) {
         Row(Modifier.fillMaxWidth().height(52.dp).padding(horizontal = 6.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(44.dp).clickable(onClick = onClose), contentAlignment = Alignment.Center) {
-                Glyph(LucideIcons.X, Color.White, size = 24.dp, description = "Close")
+                Glyph(LucideIcons.X, Color.White, size = 24.dp, description = "Fechar")
             }
             Spacer(Modifier.width(18.dp))
             Row(Modifier.clickable { albums = !albums }.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                val name = album?.let { id -> all?.firstOrNull { it.bucketId == id }?.bucket } ?: "Albums"
+                val name = album?.let { id -> all?.firstOrNull { it.bucketId == id }?.bucket } ?: "Álbuns"
                 Text(name, style = Type.BodyStrong.copy(color = Color.White, fontSize = 15.sp), maxLines = 1)
                 Spacer(Modifier.width(6.dp))
                 Box(Modifier.size(16.dp).clip(RoundedCornerShape(4.dp)).background(Color.White), contentAlignment = Alignment.Center) {
@@ -295,7 +295,7 @@ private fun MediaPickerPage(req: MediaRequest, onClose: () -> Unit, onDone: (Lis
                     tab = i
                 }, contentAlignment = Alignment.Center) {
                     Text(
-                        t,
+                        when (t) { "Videos" -> "Vídeos"; "Photos" -> "Fotos"; "Collage" -> "Colagem"; else -> t },
                         style = Type.Body.copy(
                             color = if (i == tab) Palette.Accent else Palette.TextSecondary,
                             fontWeight = if (i == tab) FontWeight.SemiBold else FontWeight.Normal,
@@ -312,12 +312,12 @@ private fun MediaPickerPage(req: MediaRequest, onClose: () -> Unit, onDone: (Lis
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    "NexusCut can see only the photos and videos you chose",
+                    "O NexusCut só pode ver as fotos e os vídeos que você selecionou",
                     style = Type.Small.copy(color = Palette.TextSecondary),
                     modifier = Modifier.weight(1f),
                 )
                 Text(
-                    "Manage",
+                    "Gerenciar",
                     style = Type.Small.copy(color = Palette.Accent, fontWeight = FontWeight.SemiBold),
                     modifier = Modifier.clickable { more.launch(permissions()) }.padding(horizontal = 10.dp, vertical = 8.dp),
                 )
@@ -327,7 +327,7 @@ private fun MediaPickerPage(req: MediaRequest, onClose: () -> Unit, onDone: (Lis
             when {
                 all == null -> CircularProgressIndicator(color = Palette.Accent, modifier = Modifier.align(Alignment.Center).size(28.dp), strokeWidth = 2.dp)
                 shown.isEmpty() -> Text(
-                    if (videos) "No videos" else "No photos",
+                    if (videos) "Nenhum vídeo" else "Nenhuma foto",
                     style = Type.Small.copy(color = Palette.TextSecondary),
                     modifier = Modifier.align(Alignment.Center),
                 )
@@ -376,13 +376,13 @@ private fun MediaPickerPage(req: MediaRequest, onClose: () -> Unit, onDone: (Lis
                                         Modifier.align(Alignment.TopEnd).padding(top = 0.dp).size(18.dp).clip(CircleShape).background(Color.White)
                                             .clickable { chosen.remove(item) },
                                         contentAlignment = Alignment.Center,
-                                    ) { Glyph(LucideIcons.Minus, Color.Black, size = 12.dp, description = "Remove") }
+                                    ) { Glyph(LucideIcons.Minus, Color.Black, size = 12.dp, description = "Remover") }
                                 }
                             }
                         }
                     }
                     Row(Modifier.fillMaxWidth().height(58.dp).padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
-                        if (collage) Text("Choose 2 to 9", style = Type.Small.copy(color = Palette.TextSecondary, fontSize = 13.sp))
+                        if (collage) Text("Escolha de 2 a 9", style = Type.Small.copy(color = Palette.TextSecondary, fontSize = 13.sp))
                         Spacer(Modifier.weight(1f))
                         val ready = if (collage) chosen.size >= 2 else chosen.isNotEmpty()
                         Box(
@@ -392,7 +392,7 @@ private fun MediaPickerPage(req: MediaRequest, onClose: () -> Unit, onDone: (Lis
                                 .padding(horizontal = 18.dp, vertical = 9.dp),
                         ) {
                             Text(
-                                if (ready) "Add (${chosen.size})" else "Add",
+                                if (ready) "Adicionar (${chosen.size})" else "Adicionar",
                                 style = Type.BodyStrong.copy(color = if (ready) Color.White else Color(0xFF7FA9AD), fontSize = 14.sp),
                             )
                         }
@@ -438,7 +438,7 @@ private fun Tile(item: Item, place: Int, imported: Boolean, onOpen: () -> Unit, 
         // already in the project, as the reference marks it
         if (imported) {
             Text(
-                "Imported",
+                "Importado",
                 style = Type.Small.copy(color = Color.White, fontSize = 10.sp),
                 modifier = Modifier.align(Alignment.TopStart).padding(4.dp).clip(RoundedCornerShape(3.dp))
                     .background(Color(0x99000000)).padding(horizontal = 4.dp, vertical = 1.dp),
@@ -488,7 +488,7 @@ private fun MediaPreview(item: Item, place: Int, multiple: Boolean, onClose: () 
         }
         Row(Modifier.fillMaxWidth().statusBarsPadding().height(52.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(44.dp).clickable(onClick = onClose), contentAlignment = Alignment.Center) {
-                Glyph(LucideIcons.ChevronLeft, Color.White, size = 26.dp, description = "Back")
+                Glyph(LucideIcons.ChevronLeft, Color.White, size = 26.dp, description = "Voltar")
             }
             Spacer(Modifier.weight(1f))
             if (multiple) {
@@ -506,7 +506,7 @@ private fun MediaPreview(item: Item, place: Int, multiple: Boolean, onClose: () 
         Box(
             Modifier.align(Alignment.BottomEnd).navigationBarsPadding().padding(16.dp).clip(RoundedCornerShape(8.dp))
                 .background(Palette.Accent).clickable(onClick = onAdd).padding(horizontal = 22.dp, vertical = 10.dp),
-        ) { Text("Add", style = Type.BodyStrong.copy(color = Color.White, fontSize = 14.sp)) }
+        ) { Text("Adicionar", style = Type.BodyStrong.copy(color = Color.White, fontSize = 14.sp)) }
     }
 }
 
@@ -533,8 +533,8 @@ private fun AlbumList(items: List<Item>, current: Long?, onChoose: (Long?) -> Un
     val list = remember(items) {
         val groups = items.groupBy { it.bucketId }
         buildList {
-            items.firstOrNull()?.let { add(Album(null, "Recents", items.size, it)) }
-            groups.forEach { (id, group) -> add(Album(id, group.first().bucket.ifEmpty { "Other" }, group.size, group.first())) }
+            items.firstOrNull()?.let { add(Album(null, "Recentes", items.size, it)) }
+            groups.forEach { (id, group) -> add(Album(id, group.first().bucket.ifEmpty { "Outros" }, group.size, group.first())) }
         }
     }
     LazyColumn(Modifier.fillMaxSize().background(Color(0xFF0E0E0E))) {

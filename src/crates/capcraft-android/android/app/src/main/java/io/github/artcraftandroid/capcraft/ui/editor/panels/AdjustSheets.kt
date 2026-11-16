@@ -52,11 +52,11 @@ private fun SheetHead(title: String, onReset: () -> Unit, onClose: () -> Unit) {
         Row(Modifier.align(Alignment.CenterStart).clickable(onClick = onReset).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
             Glyph(LucideIcons.RotateCcw, Palette.TextSecondary, size = 16.dp)
             Spacer(Modifier.width(6.dp))
-            Text("Reset", style = Type.Small.copy(color = Palette.TextSecondary))
+            Text("Redefinir", style = Type.Small.copy(color = Palette.TextSecondary))
         }
         Text(title, style = Type.Body.copy(color = Palette.Text), modifier = Modifier.align(Alignment.Center))
         Box(Modifier.align(Alignment.CenterEnd).size(40.dp).clickable(onClick = onClose), contentAlignment = Alignment.Center) {
-            Glyph(LucideIcons.CircleChevronDown, Palette.DockText, size = 20.dp, description = "Close")
+            Glyph(LucideIcons.CircleChevronDown, Palette.DockText, size = 20.dp, description = "Fechar")
         }
     }
 }

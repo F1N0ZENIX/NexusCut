@@ -87,7 +87,7 @@ fun BatchEditPanel(vm: EditorViewModel) {
                 modifier = Modifier.align(Alignment.Center),
             )
             Box(Modifier.size(44.dp).align(Alignment.CenterEnd).clickable(onClick = ::done), contentAlignment = Alignment.Center) {
-                Glyph(LucideIcons.Check, Palette.Text, size = 26.dp, description = "Done")
+                Glyph(LucideIcons.Check, Palette.Text, size = 26.dp, description = "Concluído")
             }
         }
         Box(Modifier.fillMaxWidth().height(1.dp).background(Color(0xFF2E2E2E)))
@@ -159,7 +159,7 @@ private fun CaptionLine(vm: EditorViewModel, id: String, start: Long, current: B
                     vm.start()
                 },
                 contentAlignment = Alignment.Center,
-            ) { Glyph(LucideIcons.Play, if (current) Palette.Text else Palette.TextSecondary, size = 14.dp, description = "Play") }
+            ) { Glyph(LucideIcons.Play, if (current) Palette.Text else Palette.TextSecondary, size = 14.dp, description = "Reproduzir") }
         }
         Text(clock(start), style = Type.Small.copy(color = if (current) Palette.Text else Palette.TextSecondary), modifier = Modifier.width(48.dp))
         BasicTextField(

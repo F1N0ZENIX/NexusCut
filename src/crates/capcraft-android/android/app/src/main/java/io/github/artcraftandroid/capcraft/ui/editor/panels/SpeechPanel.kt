@@ -125,7 +125,7 @@ fun SpeechPanel(vm: EditorViewModel, captions: Boolean, clipId: String?) {
                     if (result != null) {
                         vm.applyView(result)
                         vm.panel = null
-                        vm.message = if (captions) "Captions added" else "Speech added"
+                        vm.message = if (captions) "Legendas adicionadas" else "Fala adicionada"
                     } else {
                         refresh++
                     }
@@ -143,7 +143,7 @@ fun SpeechPanel(vm: EditorViewModel, captions: Boolean, clipId: String?) {
 
     val chosen = models.getOrNull(model)
     val typed = !captions && clipId == null
-    PanelFrame(if (captions) "Auto captions" else if (typed) "Text to audio" else "Text to speech", vm, tall = true) {
+    PanelFrame(if (captions) "Legendas automáticas" else if (typed) "Texto para áudio" else "Texto para fala", vm, tall = true) {
         Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp)) {
             if (typed) {
                 androidx.compose.foundation.text.BasicTextField(
@@ -153,7 +153,7 @@ fun SpeechPanel(vm: EditorViewModel, captions: Boolean, clipId: String?) {
                     cursorBrush = androidx.compose.ui.graphics.SolidColor(Palette.Accent),
                     decorationBox = { inner ->
                         Box {
-                            if (words.isEmpty()) Text("Type the words to be read aloud", style = Type.Body.copy(color = Palette.TextSecondary))
+                            if (words.isEmpty()) Text("Digite as palavras para serem lidas em voz alta", style = Type.Body.copy(color = Palette.TextSecondary))
                             inner()
                         }
                     },
@@ -161,7 +161,7 @@ fun SpeechPanel(vm: EditorViewModel, captions: Boolean, clipId: String?) {
                 )
                 Spacer(Modifier.height(12.dp))
             }
-            Text(if (captions) "Spoken language" else "Voice model", style = Type.Small)
+            Text(if (captions) "Idioma falado" else "Modelo de voz", style = Type.Small)
             Spacer(Modifier.height(8.dp))
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 models.forEachIndexed { i, m ->
@@ -176,7 +176,7 @@ fun SpeechPanel(vm: EditorViewModel, captions: Boolean, clipId: String?) {
             }
             if (!captions) {
                 Spacer(Modifier.height(12.dp))
-                Text("Voice", style = Type.Small)
+                Text("Voz", style = Type.Small)
                 Spacer(Modifier.height(8.dp))
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     voiceList.filter { chosen == null || it.family == chosen.family }.take(40).forEach { v ->
@@ -200,7 +200,7 @@ fun SpeechPanel(vm: EditorViewModel, captions: Boolean, clipId: String?) {
                         trackColor = Palette.Disabled,
                     )
                     Spacer(Modifier.height(10.dp))
-                    Text("Cancel", style = Type.BodyStrong, modifier = Modifier.clickable { runCatching { cancelSpeech() }; job = Job.Idle })
+                    Text("Cancelar", style = Type.BodyStrong, modifier = Modifier.clickable { runCatching { cancelSpeech() }; job = Job.Idle })
                 }
                 Job.Idle -> {
                     val m = chosen

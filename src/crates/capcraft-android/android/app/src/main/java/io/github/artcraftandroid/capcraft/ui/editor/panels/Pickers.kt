@@ -114,7 +114,7 @@ fun PackagesPanel(vm: EditorViewModel, kind: String, target: Panel.Target) {
     }
     // effects are browsed as the reference does: a search field in the bar, categories under it
     var query by remember { mutableStateOf("") }
-    PanelFrame("Effects", vm, tall = true, titleOnTop = true, header = { SearchField(query, { query = it }, "Search effects") }) {
+    PanelFrame("Efeitos", vm, tall = true, titleOnTop = true, header = { SearchField(query, { query = it }, "Search effects") }) {
         PackagesContent(vm, kind, target, query)
     }
 }
@@ -172,7 +172,7 @@ private fun ColumnScope.PackagesContent(vm: EditorViewModel, kind: String, targe
     var keptTab by remember { mutableStateOf(false) }
     val kept = remember(Favorites.version.intValue, kind) { if (keepable) Favorites.of(context, kind) else emptySet() }
     fun keep(p: PackageInfo) {
-        vm.message = if (Favorites.toggle(context, kind, p.id)) "Added to favorites" else "Removed from favorites"
+        vm.message = if (Favorites.toggle(context, kind, p.id)) "Adicionado aos favoritos" else "Removido dos favoritos"
     }
     val shown = when {
         query.isNotBlank() -> all.filter { it.name.contains(query.trim(), ignoreCase = true) }
@@ -276,13 +276,13 @@ private fun ColumnScope.PackagesContent(vm: EditorViewModel, kind: String, targe
                     Box(
                         Modifier.padding(start = 12.dp).size(32.dp).clip(CircleShape).background(Color(0xFF3A3A3A)).clickable { searching = true },
                         contentAlignment = Alignment.Center,
-                    ) { Glyph(LucideIcons.Search, Palette.DockText, size = 16.dp, description = "Search filters") }
+                    ) { Glyph(LucideIcons.Search, Palette.DockText, size = 16.dp, description = "Buscar filtros") }
                     // a .cube table from the phone, made a filter of the user's own
                     Box(
                         Modifier.padding(start = 8.dp).size(32.dp).clip(CircleShape).background(Color(0xFF3A3A3A))
                             .clickable { importLook.launch(arrayOf("*/*")) },
                         contentAlignment = Alignment.Center,
-                    ) { Glyph(LucideIcons.Upload, Palette.DockText, size = 16.dp, description = "Import a .cube look") }
+                    ) { Glyph(LucideIcons.Upload, Palette.DockText, size = 16.dp, description = "Importar um visual .cube") }
                     KeptTab(keptTab) { keptTab = true }
                     Box(Modifier.weight(1f)) { Tabs(categories, if (keptTab) -1 else category) { category = it; keptTab = false } }
                 }
@@ -299,7 +299,7 @@ private fun ColumnScope.PackagesContent(vm: EditorViewModel, kind: String, targe
         }
         if (keptTab && query.isBlank() && shown.isEmpty()) {
             Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
-                Text("Press and hold one to keep it here", style = Type.Small)
+                Text("Toque e segure para salvar aqui", style = Type.Small)
             }
             return@run
         }
@@ -348,7 +348,7 @@ private fun ColumnScope.PackagesContent(vm: EditorViewModel, kind: String, targe
                             verticalArrangement = Arrangement.Center,
                         ) {
                             Glyph(LucideIcons.SlidersHorizontal, Color.White, size = 20.dp)
-                            Text("Adjust", style = Type.Small.copy(color = Color.White, fontSize = 11.sp))
+                            Text("Ajustar", style = Type.Small.copy(color = Color.White, fontSize = 11.sp))
                         }
                     }
                 }
@@ -392,7 +392,7 @@ private fun ColumnScope.PackagesContent(vm: EditorViewModel, kind: String, targe
                 Row(Modifier.clickable { filterToAll(vm, clip.id, ids) }.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Glyph(LucideIcons.Layers, Palette.DockText, size = 18.dp)
                     Spacer(Modifier.width(6.dp))
-                    Text("Apply to all", style = Type.Body.copy(color = Palette.DockText))
+                    Text("Aplicar a todos", style = Type.Body.copy(color = Palette.DockText))
                 }
             }
         }
@@ -403,7 +403,7 @@ private fun ColumnScope.PackagesContent(vm: EditorViewModel, kind: String, targe
 @Composable
 private fun KeptTab(on: Boolean, onClick: () -> Unit) {
     Box(Modifier.padding(start = 10.dp).size(36.dp).clickable(onClick = onClick), contentAlignment = Alignment.Center) {
-        Glyph(LucideIcons.Bookmark, if (on) Palette.Text else Palette.TextSecondary, size = 19.dp, description = "Favorites")
+        Glyph(LucideIcons.Bookmark, if (on) Palette.Text else Palette.TextSecondary, size = 19.dp, description = "Favoritos")
     }
 }
 
@@ -435,7 +435,7 @@ private fun ColumnScope.EffectAdjust(vm: EditorViewModel, clipId: String, p: Pac
     val params = (0 until (chain?.length() ?: 0)).map { chain!!.getJSONObject(it) }
         .firstOrNull { it.optString("id") == p.id }?.optJSONObject("params") ?: JSONObject()
     Row(Modifier.fillMaxWidth().height(46.dp).clickable(onClick = onBack).padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-        Glyph(LucideIcons.ChevronLeft, Palette.DockText, size = 20.dp, description = "Back")
+        Glyph(LucideIcons.ChevronLeft, Palette.DockText, size = 20.dp, description = "Voltar")
         Spacer(Modifier.width(6.dp))
         Text(p.name, style = Type.BodyStrong)
     }
@@ -480,7 +480,7 @@ private fun filterToAll(vm: EditorViewModel, clipId: String, ids: Set<String>) {
     }
     if (batch.length() > 0) {
         vm.edit { applyBatch(batch.toString()) }
-        vm.message = "Applied to all"
+        vm.message = "Aplicado a todos"
     }
 }
 
@@ -645,7 +645,7 @@ private fun ColumnScope.PresetsContent(vm: EditorViewModel) {
     fun apply(params: JSONObject) {
         val c = clip?.takeIf { visual }
         if (c == null) {
-            vm.message = "Choose a clip to put the preset on"
+            vm.message = "Escolha um clipe para aplicar a predefinição"
             return
         }
         val adjust = JSONObject(params.toString()).apply { remove(PRESET_PLUS) }
@@ -687,7 +687,7 @@ private fun ColumnScope.PresetsContent(vm: EditorViewModel) {
                 Box(
                     Modifier.size(40.dp).clickable { AdjustPresets.remove(context, name); items = AdjustPresets.all(context) },
                     contentAlignment = Alignment.Center,
-                ) { Glyph(LucideIcons.Trash2, Palette.TextSecondary, size = 18.dp, description = "Delete $name") }
+                ) { Glyph(LucideIcons.Trash2, Palette.TextSecondary, size = 18.dp, description = "Excluir $name") }
             }
         }
     }
@@ -762,7 +762,7 @@ private fun ColumnScope.AdjustContent(vm: EditorViewModel) {
     /** Reads the picture under the playhead and puts what [tool] makes of it on the knobs. */
     fun runSmart(tool: SmartTool) {
         val c = target?.takeIf { it.kind == "video" || it.kind == "image" } ?: run {
-            vm.message = "Choose a video or photo first"
+            vm.message = "Escolha um vídeo ou uma foto primeiro"
             return
         }
         val key = "${c.id}:${-1 - SMART.indexOf(tool)}"
@@ -780,13 +780,13 @@ private fun ColumnScope.AdjustContent(vm: EditorViewModel) {
             }
             reading = false
             if (all == null) {
-                vm.message = "Could not read the picture"
+                vm.message = "Não foi possível ler a imagem"
                 return@launch
             }
             val base = JSONObject()
             all.keys().forEach { key -> if (!tool.colourOnly || key in COLOUR_KEYS) base.put(key, all.get(key)) }
             if (base.length() == 0) {
-                vm.message = "The picture already looks balanced"
+                vm.message = "A imagem já parece equilibrada"
                 return@launch
             }
             found = key to base
@@ -798,13 +798,13 @@ private fun ColumnScope.AdjustContent(vm: EditorViewModel) {
     /** The selected clip's adjustments kept as a preset, to put on other clips later. */
     fun savePreset() {
         if (target == null || adjust.length() + plus.length() == 0) {
-            vm.message = "Adjust something first"
+            vm.message = "Faça algum ajuste primeiro"
             return
         }
         val kept = JSONObject(adjust.toString())
         if (plus.length() > 0) kept.put(PRESET_PLUS, JSONObject(plus.toString()))
         val saved = AdjustPresets.save(vm.getApplication(), kept)
-        vm.message = "Saved as $saved"
+        vm.message = "Salvo como $saved"
     }
 
     /** The selected clip's adjustments, on every picture of the main track too. */
@@ -821,7 +821,7 @@ private fun ColumnScope.AdjustContent(vm: EditorViewModel) {
         }
         if (batch.length() > 0) {
             vm.edit { applyBatch(batch.toString()) }
-            vm.message = "Applied to all"
+            vm.message = "Aplicado a todos"
         }
     }
 
@@ -901,7 +901,7 @@ private fun ColumnScope.AdjustContent(vm: EditorViewModel) {
             // how much of what the smart tool worked out is on
             val base = found?.takeIf { it.first == "${target?.id}:$which" }?.second
             when {
-                reading -> Text("Reading the picture…", style = Type.Small, modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 10.dp))
+                reading -> Text("Lendo a imagem…", style = Type.Small, modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 10.dp))
                 base != null -> ValueSlider(
                     value = strength,
                     range = 0f..100f,
@@ -934,19 +934,19 @@ private fun ColumnScope.AdjustContent(vm: EditorViewModel) {
             Row(Modifier.clickable(onClick = ::reset).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Glyph(LucideIcons.RotateCcw, Palette.DockText, size = 18.dp)
                 Spacer(Modifier.width(6.dp))
-                Text("Reset", style = Type.Body.copy(color = Palette.DockText))
+                Text("Redefinir", style = Type.Body.copy(color = Palette.DockText))
             }
             Spacer(Modifier.width(12.dp))
             Row(Modifier.clickable(onClick = ::applyToAll).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Glyph(LucideIcons.Layers, Palette.DockText, size = 18.dp)
                 Spacer(Modifier.width(6.dp))
-                Text("Apply to all", style = Type.Body.copy(color = Palette.DockText))
+                Text("Aplicar a todos", style = Type.Body.copy(color = Palette.DockText))
             }
             Spacer(Modifier.weight(1f))
             Row(Modifier.clickable(onClick = ::savePreset).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Glyph(LucideIcons.Bookmark, Palette.DockText, size = 18.dp)
                 Spacer(Modifier.width(6.dp))
-                Text("Save preset", style = Type.Body.copy(color = Palette.DockText))
+                Text("Salvar predefinição", style = Type.Body.copy(color = Palette.DockText))
             }
         }
     }

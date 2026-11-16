@@ -117,10 +117,10 @@ private fun dressCaptions(vm: EditorViewModel, look: CaptionLook): Boolean {
 fun CaptionTemplatesPanel(vm: EditorViewModel) {
     var chosen by remember { mutableIntStateOf(-1) }
     val any = remember(vm.timeline?.revision) { captionIds(vm).isNotEmpty() }
-    PanelFrame("Caption templates", vm, height = 260.dp) {
+    PanelFrame("Modelos de legenda", vm, height = 260.dp) {
         if (!any) {
             Text(
-                "Make captions first - with Auto captions, Enter captions or a caption file - then give them all a look here.",
+                "Crie legendas primeiro — automaticamente, digitando ou importando um arquivo — e depois escolha o visual aqui.",
                 style = Type.Small,
                 modifier = Modifier.padding(24.dp),
             )
@@ -144,9 +144,9 @@ fun CaptionTemplatesPanel(vm: EditorViewModel) {
 
 /** The language a caption model hears, as the sheet names it. */
 private fun languageOf(m: SpeechModel): String = when (m.id) {
-    "tiny" -> "Auto detect (fast)"
-    "base" -> "Auto detect"
-    "base.en" -> "English"
+    "tiny" -> "Detecção automática (rápida)"
+    "base" -> "Detecção automática"
+    "base.en" -> "Inglês"
     else -> m.label
 }
 
@@ -189,13 +189,13 @@ fun AutoCaptionsSheet(vm: EditorViewModel, lyrics: Boolean = false) {
             override fun onProgress(fraction: Float, stage: String) {
                 scope.launch(Dispatchers.Main) {
                     val label = when (stage) {
-                        "download" -> "Downloading"
-                        "unpack" -> "Unpacking"
-                        "read" -> "Reading the sound"
-                        "load" -> "Loading"
+                        "download" -> "Baixando"
+                        "unpack" -> "Descompactando"
+                        "read" -> "Lendo o áudio"
+                        "load" -> "Carregando"
                         // lyrics: the voice parted from the music before it is heard
-                        "work" -> "Separating the voice"
-                        else -> "Recognizing"
+                        "work" -> "Separando a voz"
+                        else -> "Reconhecendo"
                     }
                     job = label to fraction
                 }
@@ -208,7 +208,7 @@ fun AutoCaptionsSheet(vm: EditorViewModel, lyrics: Boolean = false) {
                         vm.applyView(result)
                         dress()
                         vm.panel = null
-                        vm.message = "Captions added"
+                        vm.message = "Legendas adicionadas"
                     } else {
                         then = true
                         refresh++
@@ -228,12 +228,12 @@ fun AutoCaptionsSheet(vm: EditorViewModel, lyrics: Boolean = false) {
     fun generate() {
         val m = models.getOrNull(model) ?: return
         if (!m.downloaded) {
-            job = "Downloading" to 0f
+            job = "Baixando" to 0f
             runCatching { downloadSpeechModel(m.id, m.family, listener) }.onFailure { job = null; vm.message = it.userMessage }
             return
         }
         val s = vm.session ?: return
-        job = "Reading the sound" to 0f
+        job = "Lendo o áudio" to 0f
         val shouldReplace = replace && existing > 0
         val useUppercase = uppercase
         val stripPunctuation = removePunctuation
@@ -265,22 +265,22 @@ fun AutoCaptionsSheet(vm: EditorViewModel, lyrics: Boolean = false) {
                 .navigationBarsPadding().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp).padding(bottom = 14.dp),
         ) {
             Box(Modifier.fillMaxWidth().height(54.dp), contentAlignment = Alignment.Center) {
-                Text(if (lyrics) "Auto lyrics" else "Auto captions", style = Type.BodyStrong.copy(fontSize = 17.sp, color = Palette.Text))
+                Text(if (lyrics) "Letra automática" else "Legendas automáticas", style = Type.BodyStrong.copy(fontSize = 17.sp, color = Palette.Text))
                 Box(
                     Modifier.align(Alignment.CenterEnd).size(40.dp).clickable {
                         if (job != null) runCatching { cancelSpeech() }
                         vm.panel = null
                     },
                     contentAlignment = Alignment.CenterEnd,
-                ) { Glyph(LucideIcons.X, Palette.Text, size = 24.dp, description = "Close") }
+                ) { Glyph(LucideIcons.X, Palette.Text, size = 24.dp, description = "Fechar") }
             }
             Card {
-                SheetRow(LucideIcons.ScanText, "Generate from", "All sound", chevron = false) {}
+                SheetRow(LucideIcons.ScanText, "Gerar a partir de", "Todo o áudio", chevron = false) {}
             }
             Spacer(Modifier.height(12.dp))
             Card {
                 val m = models.getOrNull(model)
-                SheetRow(LucideIcons.Languages, "Spoken language", m?.let(::languageOf) ?: "…", chevron = true, open = choosing) { choosing = !choosing }
+                SheetRow(LucideIcons.Languages, "Idioma falado", m?.let(::languageOf) ?: "…", chevron = true, open = choosing) { choosing = !choosing }
                 if (choosing) {
                     models.forEachIndexed { i, option ->
                         Row(
@@ -301,7 +301,7 @@ fun AutoCaptionsSheet(vm: EditorViewModel, lyrics: Boolean = false) {
                 Row(Modifier.fillMaxWidth().padding(start = 14.dp, end = 14.dp, top = 14.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                     Glyph(LucideIcons.Captions, Palette.Text, size = 20.dp)
                     Spacer(Modifier.width(12.dp))
-                    Text("Style", style = Type.Body.copy(fontSize = 16.sp, color = Palette.Text))
+                    Text("Estilo", style = Type.Body.copy(fontSize = 16.sp, color = Palette.Text))
                 }
                 Row(
                     Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(start = 12.dp, end = 12.dp, bottom = 14.dp),
@@ -316,14 +316,14 @@ fun AutoCaptionsSheet(vm: EditorViewModel, lyrics: Boolean = false) {
                     Modifier.fillMaxWidth().height(48.dp).clickable(enabled = job == null) { uppercase = !uppercase }.padding(horizontal = 14.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Uppercase captions", style = Type.Body.copy(color = Palette.Text), modifier = Modifier.weight(1f))
+                    Text("Legendas em maiúsculas", style = Type.Body.copy(color = Palette.Text), modifier = Modifier.weight(1f))
                     Switch(uppercase)
                 }
                 Row(
                     Modifier.fillMaxWidth().height(48.dp).clickable(enabled = job == null) { removePunctuation = !removePunctuation }.padding(horizontal = 14.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Remove . , ! ? ; :", style = Type.Body.copy(color = Palette.Text), modifier = Modifier.weight(1f))
+                    Text("Remover . , ! ? ; :", style = Type.Body.copy(color = Palette.Text), modifier = Modifier.weight(1f))
                     Switch(removePunctuation)
                 }
             }
@@ -336,7 +336,7 @@ fun AutoCaptionsSheet(vm: EditorViewModel, lyrics: Boolean = false) {
                     ) {
                         Glyph(LucideIcons.Replace, Palette.Text, size = 20.dp)
                         Spacer(Modifier.width(12.dp))
-                        Text("Replace current captions", style = Type.Body.copy(fontSize = 16.sp, color = Palette.Text), modifier = Modifier.weight(1f))
+                        Text("Substituir legendas atuais", style = Type.Body.copy(fontSize = 16.sp, color = Palette.Text), modifier = Modifier.weight(1f))
                         Switch(replace)
                     }
                 }
@@ -356,15 +356,15 @@ fun AutoCaptionsSheet(vm: EditorViewModel, lyrics: Boolean = false) {
                 Text(
                     when {
                         running != null -> "${running.first} ${(running.second * 100).toInt()}%"
-                        m != null && !m.downloaded -> "Download and generate (${mb(m.sizeBytes)})"
-                        else -> "Generate"
+                        m != null && !m.downloaded -> "Baixar e gerar (${mb(m.sizeBytes)})"
+                        else -> "Gerar"
                     },
                     style = Type.BodyStrong.copy(fontSize = 16.sp, color = if (running == null) Palette.OnAccent else Palette.Text),
                 )
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                if (running != null) "Tap the cross to stop" else "Made on this phone; nothing is uploaded.",
+                if (running != null) "Toque no X para parar" else "Feito neste celular; nada é enviado para a internet.",
                 style = Type.Tiny.copy(color = Palette.TextSecondary),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
@@ -407,7 +407,7 @@ private fun LookChip(l: CaptionLook, selected: Boolean, onClick: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         if (l.name == "Default") {
-            Text("Default", style = Type.Body.copy(color = Palette.Text))
+            Text("Padrão", style = Type.Body.copy(color = Palette.Text))
             return@Box
         }
         val colour = runCatching { Color(android.graphics.Color.parseColor(l.color)) }.getOrDefault(Color.White)

@@ -146,7 +146,7 @@ fun CustomCutoutPanel(vm: EditorViewModel) {
                 .onFailure { e -> withContext(Dispatchers.Main) { progress = null; vm.message = e.userMessage } }
         }
     }
-    PanelFrame("Custom removal", vm, height = 200.dp) {
+    PanelFrame("Remoção personalizada", vm, height = 200.dp) {
         val p = progress ?: CutoutBrush.reading
         if (p != null) {
             Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 14.dp)) {

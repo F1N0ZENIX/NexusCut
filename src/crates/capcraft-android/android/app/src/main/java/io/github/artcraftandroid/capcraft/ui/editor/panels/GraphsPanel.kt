@@ -86,7 +86,7 @@ fun GraphsPanel(vm: EditorViewModel) {
 
     // a curve of one's own: its handles dragged on a square below the shelf
     var custom by remember(clip.id, target) { mutableStateOf(current != null && GRAPHS.none { g -> g.points.indices.all { abs(g.points[it] - current[it]) < 0.005 } }) }
-    PanelFrame("Graphs", vm, height = if (custom) 340.dp else 230.dp) {
+    PanelFrame("Gráficos", vm, height = if (custom) 340.dp else 230.dp) {
         if (target == null) {
             Spacer(Modifier.height(36.dp))
             Text(
@@ -98,7 +98,7 @@ fun GraphsPanel(vm: EditorViewModel) {
         }
         Spacer(Modifier.height(8.dp))
         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 8.dp)) {
-            ChoiceTile("Custom", custom, onClick = { custom = true }, size = 56.dp) { GraphGlyph(current ?: GRAPHS[0].points) }
+            ChoiceTile("Personalizado", custom, onClick = { custom = true }, size = 56.dp) { GraphGlyph(current ?: GRAPHS[0].points) }
             GRAPHS.forEach { g ->
                 val on = !custom && current != null && g.points.indices.all { abs(g.points[it] - current[it]) < 0.005 }
                 ChoiceTile(g.name, on, onClick = {

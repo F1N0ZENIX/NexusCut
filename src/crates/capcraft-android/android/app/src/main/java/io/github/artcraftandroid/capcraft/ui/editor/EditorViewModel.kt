@@ -146,7 +146,7 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
         linkageOn = on
         getApplication<Application>().getSharedPreferences(SETTINGS, android.content.Context.MODE_PRIVATE).edit().putBoolean(LINKAGE_KEY, on).apply()
         runCatching { io.github.artcraftandroid.capcraft.core.setLinkage(on) }
-        message = if (on) "Elements follow the main track" else "Elements stay where they are"
+        message = if (on) "Os elementos acompanham a faixa principal" else "Os elementos permanecem onde estão"
     }
     var panel: Panel? by mutableStateOf(null)
     var message: String? by mutableStateOf(null)
@@ -277,7 +277,7 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
             result.onSuccess { v ->
                 timeline = v
                 scheduleSave()
-                message = "Your video is ready - change anything you like"
+                message = "Seu vídeo está pronto — altere o que quiser"
             }.onFailure { fail(it) }
         }
     }
@@ -312,13 +312,13 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
                 runCatching { still(c.path, c.sourceStartUs, 160u).toBitmap()?.let(::autoAdjustments) }.getOrNull()
             }
             if (found == null) {
-                message = "Could not read the photo"
+                message = "Não foi possível ler a foto"
                 return@launch
             }
             val light = JSONObject()
             listOf("brightness", "contrast", "highlights", "shadows").forEach { k -> if (found.has(k)) light.put(k, found.get(k)) }
             if (light.length() == 0) {
-                message = "The photo is already well lit"
+                message = "A foto já está bem iluminada"
                 return@launch
             }
             val chain = clipJson(c.id)?.optJSONArray("videoEffects") ?: org.json.JSONArray()
@@ -336,7 +336,7 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
             }
             if (!merged) next.put(JSONObject().put("id", "concat.adjust").put("params", light))
             patch(c.id, JSONObject().put("videoEffects", next))
-            message = "Lighting fixed"
+            message = "Iluminação corrigida"
         }
     }
 
@@ -480,7 +480,7 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
                 photoTab = true
                 exportPhoto = true
                 exportGif = false
-                message = "Stop on the frame you want, then Export"
+                message = "Pare no quadro desejado e toque em Exportar"
             }
             "record" -> panel = Panel.Voiceover
         }
@@ -698,7 +698,7 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
         command(
             JSONObject().put("op", "setTrackFlag").put("trackId", main.trackId).put("flag", "muted").put("value", !main.muted),
         )
-        message = if (main.muted) "Clip audio on" else "Clip audio muted"
+        message = if (main.muted) "Áudio do clipe ativado" else "Áudio do clipe silenciado"
     }
 
     fun switchToOverlay(clip: ClipView) = edit(select = { clip.id }) { toOverlay(clip.id) }
@@ -736,7 +736,7 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
         if (!had) next.put(clip.id)
         if (next.length() == 0) note.remove("unlinked") else note.put("unlinked", next)
         command(JSONObject().put("op", "setTimelineExtra").put("key", LINKAGE_EXTRA).put("value", if (note.length() == 0) JSONObject.NULL else note))
-        message = if (had) "Linked to this clip" else "Unlinked from this clip"
+        message = if (had) "Vinculado a este clipe" else "Desvinculado deste clipe"
     }
 
     fun freeze(clip: ClipView) = edit(select = { it.createdId.ifEmpty { clip.id } }) { freeze(clip.id, playhead) }
@@ -831,7 +831,7 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
     fun addStickerFrom(uri: Uri) {
         viewModelScope.launch {
             val file = withContext(Threads.commands) { runCatching { Media.importUri(getApplication(), path, uri) }.getOrNull() }
-            if (file == null) message = "Could not add that picture" else addSticker(file)
+            if (file == null) message = "Não foi possível adicionar essa imagem" else addSticker(file)
         }
     }
 
@@ -919,7 +919,7 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
                         ?: error("Could not write the file.")
                 }
             }
-            result.onSuccess { message = "Captions saved" }.onFailure { fail(it) }
+            result.onSuccess { message = "Legendas salvas" }.onFailure { fail(it) }
         }
     }
 
@@ -938,7 +938,7 @@ class EditorViewModel(app: Application, val path: String) : AndroidViewModel(app
             }
             result.onSuccess { v ->
                 applyView(v)
-                message = "Captions added"
+                message = "Legendas adicionadas"
             }.onFailure { fail(it) }
         }
     }

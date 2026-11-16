@@ -76,13 +76,13 @@ data class Tool(
 private fun multiTools(vm: EditorViewModel): List<Tool> {
     val chosen = vm.chosen.orEmpty()
     return listOf(
-        Tool("addtext", "Add text", LucideIcons.Type) {
+        Tool("addtext", "Adicionar texto", LucideIcons.Type) {
             vm.chosen = null
             vm.select(null)
             vm.panel = Panel.Text(null)
         },
         divider("d-multi"),
-        Tool("delete", "Delete", LucideIcons.Trash2, enabled = chosen.isNotEmpty()) {
+        Tool("delete", "Excluir", LucideIcons.Trash2, enabled = chosen.isNotEmpty()) {
             vm.edit { delete(chosen.toList()) }
             vm.chosen = null
         },
@@ -190,7 +190,7 @@ fun Dock(vm: EditorViewModel) {
                         if ((selected != null && !restingMain) || choosing) LucideIcons.ChevronsLeft else LucideIcons.ChevronLeft,
                         Palette.DockText,
                         size = 22.dp,
-                        description = "Back",
+                        description = "Voltar",
                     )
                 }
             }
@@ -253,76 +253,76 @@ private fun rootTools(vm: EditorViewModel): List<Tool> = listOfNotNull(
     } else {
         null
     },
-    Tool("edit", "Edit", LucideIcons.Scissors) {
-        vm.mainClipAtPlayhead()?.let { vm.select(it.id) } ?: run { vm.message = "Add a clip first" }
+    Tool("edit", "Editar", LucideIcons.Scissors) {
+        vm.mainClipAtPlayhead()?.let { vm.select(it.id) } ?: run { vm.message = "Adicione um clipe primeiro" }
     },
-    Tool("audio", "Audio", LucideIcons.Music2) { vm.dock = vm.dock + DockLevel.Group("audio") },
-    Tool("text", "Text", LucideIcons.Type) { vm.dock = vm.dock + DockLevel.Group("text") },
-    Tool("effects", "Effects", LucideIcons.Star) { vm.dock = vm.dock + DockLevel.Group("effects") },
-    Tool("overlay", "Overlay", LucideIcons.Image) { vm.dock = vm.dock + DockLevel.Group("overlay") },
+    Tool("audio", "Áudio", LucideIcons.Music2) { vm.dock = vm.dock + DockLevel.Group("audio") },
+    Tool("text", "Texto", LucideIcons.Type) { vm.dock = vm.dock + DockLevel.Group("text") },
+    Tool("effects", "Efeitos", LucideIcons.Star) { vm.dock = vm.dock + DockLevel.Group("effects") },
+    Tool("overlay", "Sobreposição", LucideIcons.Image) { vm.dock = vm.dock + DockLevel.Group("overlay") },
     // the auto captions sheet opens straight over the group, as the reference does
-    Tool("captions", "Captions", LucideIcons.Captions) {
+    Tool("captions", "Legendas", LucideIcons.Captions) {
         vm.dock = vm.dock + DockLevel.Group("captions")
         vm.panel = Panel.Captions
     },
     // both open their sheet over a group of the two, as the reference does
-    Tool("filters", "Filters", LucideIcons.Blend) {
+    Tool("filters", "Filtros", LucideIcons.Blend) {
         vm.dock = vm.dock + DockLevel.Group("filters")
         vm.panel = Panel.Packages("filter", Panel.Target.Layer)
     },
-    Tool("adjust", "Adjust", LucideIcons.Settings2) {
+    Tool("adjust", "Ajustar", LucideIcons.Settings2) {
         vm.dock = vm.dock + DockLevel.Group("filters")
         vm.panel = Panel.Adjust
     },
-    Tool("stickers", "Stickers", LucideIcons.Sticker) { vm.panel = Panel.Stickers },
-    Tool("transcript", "Transcript", LucideIcons.FileText) { vm.panel = Panel.Transcript },
-    Tool("ratio", "Aspect ratio", LucideIcons.Square) { vm.panel = Panel.Ratio },
-    Tool("background", "Background", MaterialIcons.Texture) { vm.dock = vm.dock + DockLevel.Group("background") },
+    Tool("stickers", "Figurinhas", LucideIcons.Sticker) { vm.panel = Panel.Stickers },
+    Tool("transcript", "Transcrição", LucideIcons.FileText) { vm.panel = Panel.Transcript },
+    Tool("ratio", "Proporção", LucideIcons.Square) { vm.panel = Panel.Ratio },
+    Tool("background", "Fundo", MaterialIcons.Texture) { vm.dock = vm.dock + DockLevel.Group("background") },
 )
 
 private fun groupTools(vm: EditorViewModel, id: String, pickers: Pickers): List<Tool> = when (id) {
     "audio" -> listOf(
-        Tool("extracted", "Extract", LucideIcons.AudioLines) { pickers.video { vm.addFile(it, asAudio = true) } },
-        Tool("sounds", "Sounds", LucideIcons.Music2) { vm.panel = Panel.Sounds },
-        Tool("soundfx", "Sound FX", LucideIcons.Sparkles) { vm.panel = Panel.SoundFx },
-        Tool("voiceover", "Record", LucideIcons.Mic) { vm.panel = Panel.Voiceover },
+        Tool("extracted", "Extrair", LucideIcons.AudioLines) { pickers.video { vm.addFile(it, asAudio = true) } },
+        Tool("sounds", "Sons", LucideIcons.Music2) { vm.panel = Panel.Sounds },
+        Tool("soundfx", "Efeitos sonoros", LucideIcons.Sparkles) { vm.panel = Panel.SoundFx },
+        Tool("voiceover", "Gravar", LucideIcons.Mic) { vm.panel = Panel.Voiceover },
         divider("d-audiomake"),
-        Tool("texttoaudio", "Text to audio", LucideIcons.AudioLines) { vm.panel = Panel.Speech(null) },
+        Tool("texttoaudio", "Texto para áudio", LucideIcons.AudioLines) { vm.panel = Panel.Speech(null) },
     )
     "text" -> listOf(
-        Tool("addtext", "Add text", LucideIcons.Type) { vm.panel = Panel.Text(null) },
-        Tool("autocaptions", "Auto Captions", LucideIcons.Captions) { vm.panel = Panel.Captions },
-        Tool("stickers", "Stickers", LucideIcons.Sticker) { vm.panel = Panel.Stickers },
-        Tool("draw", "Draw", LucideIcons.Paintbrush) { vm.panel = Panel.Draw },
+        Tool("addtext", "Adicionar texto", LucideIcons.Type) { vm.panel = Panel.Text(null) },
+        Tool("autocaptions", "Legendas automáticas", LucideIcons.Captions) { vm.panel = Panel.Captions },
+        Tool("stickers", "Figurinhas", LucideIcons.Sticker) { vm.panel = Panel.Stickers },
+        Tool("draw", "Desenhar", LucideIcons.Paintbrush) { vm.panel = Panel.Draw },
         divider("d-textmore"),
         // a new title starts on the text panel's templates
-        Tool("texttemplate", "Text template", LucideIcons.LayoutTemplate) { vm.panel = Panel.Text(null) },
-        Tool("texttoaudio", "Text to audio", LucideIcons.AudioLines) { vm.panel = Panel.Speech(null) },
-        Tool("autolyrics", "Auto lyrics", LucideIcons.Music) { vm.panel = Panel.Lyrics },
+        Tool("texttemplate", "Modelo de texto", LucideIcons.LayoutTemplate) { vm.panel = Panel.Text(null) },
+        Tool("texttoaudio", "Texto para áudio", LucideIcons.AudioLines) { vm.panel = Panel.Speech(null) },
+        Tool("autolyrics", "Letra automática", LucideIcons.Music) { vm.panel = Panel.Lyrics },
     )
     "overlay" -> listOf(
-        Tool("addoverlay", "Add overlay", LucideIcons.SquarePlus) { pickers.single { vm.addFile(it, asAudio = false) } },
+        Tool("addoverlay", "Adicionar sobreposição", LucideIcons.SquarePlus) { pickers.single { vm.addFile(it, asAudio = false) } },
     )
     "filters" -> listOf(
-        Tool("filterlayer", "Filters", LucideIcons.Blend) { vm.panel = Panel.Packages("filter", Panel.Target.Layer) },
-        Tool("adjustlayer", "Adjust", LucideIcons.Settings2) { vm.panel = Panel.Adjust },
+        Tool("filterlayer", "Filtros", LucideIcons.Blend) { vm.panel = Panel.Packages("filter", Panel.Target.Layer) },
+        Tool("adjustlayer", "Ajustar", LucideIcons.Settings2) { vm.panel = Panel.Adjust },
     )
     "effects" -> listOf(
-        Tool("videoeffects", "Video effects", LucideIcons.Star) { vm.panel = Panel.Packages("effect", Panel.Target.Layer) },
-        Tool("bodyeffects", "Body effects", LucideIcons.UserRound) { vm.panel = Panel.BodyEffects },
+        Tool("videoeffects", "Efeitos de vídeo", LucideIcons.Star) { vm.panel = Panel.Packages("effect", Panel.Target.Layer) },
+        Tool("bodyeffects", "Efeitos corporais", LucideIcons.UserRound) { vm.panel = Panel.BodyEffects },
     )
     "background" -> listOf(
-        Tool("bgcolor", "Color", LucideIcons.Palette) { vm.panel = Panel.Background(0) },
-        Tool("bgimage", "Image", LucideIcons.Image) { vm.panel = Panel.Background(1) },
-        Tool("bgblur", "Blur", LucideIcons.Droplet) { vm.panel = Panel.Background(2) },
+        Tool("bgcolor", "Cor", LucideIcons.Palette) { vm.panel = Panel.Background(0) },
+        Tool("bgimage", "Imagem", LucideIcons.Image) { vm.panel = Panel.Background(1) },
+        Tool("bgblur", "Desfoque", LucideIcons.Droplet) { vm.panel = Panel.Background(2) },
     )
     "captions" -> listOf(
-        Tool("entercaptions", "Enter captions", LucideIcons.TextCursorInput) { vm.panel = Panel.EnterCaptions },
-        Tool("autocaptions", "Auto Captions", LucideIcons.Captions) { vm.panel = Panel.Captions },
-        Tool("captiontemplates", "Caption templates", LucideIcons.LayoutTemplate) { vm.panel = Panel.CaptionTemplates },
-        Tool("autolyrics", "Auto lyrics", LucideIcons.Music) { vm.panel = Panel.Lyrics },
-        Tool("importcaptions", "Import captions", LucideIcons.FolderOpen) { pickers.captions { vm.importCaptions(it) } },
-        Tool("exportcaptions", "Export captions", LucideIcons.Download) { vm.exportCaptions { name -> pickers.saveCaptions(name) { vm.saveCaptions(it) } } },
+        Tool("entercaptions", "Inserir legendas", LucideIcons.TextCursorInput) { vm.panel = Panel.EnterCaptions },
+        Tool("autocaptions", "Legendas automáticas", LucideIcons.Captions) { vm.panel = Panel.Captions },
+        Tool("captiontemplates", "Modelos de legenda", LucideIcons.LayoutTemplate) { vm.panel = Panel.CaptionTemplates },
+        Tool("autolyrics", "Letra automática", LucideIcons.Music) { vm.panel = Panel.Lyrics },
+        Tool("importcaptions", "Importar legendas", LucideIcons.FolderOpen) { pickers.captions { vm.importCaptions(it) } },
+        Tool("exportcaptions", "Exportar legendas", LucideIcons.Download) { vm.exportCaptions { name -> pickers.saveCaptions(name) { vm.saveCaptions(it) } } },
     )
     else -> emptyList()
 }
@@ -331,24 +331,24 @@ private fun groupTools(vm: EditorViewModel, id: String, pickers: Pickers): List<
 private fun clipSubTools(vm: EditorViewModel, clip: ClipView, level: String): List<Tool> = when (level) {
     // effects on the clip itself: the picture's, or those that treat the person apart
     "effects" -> listOf(
-        Tool("videoeffects", "Video effects", LucideIcons.Star) { vm.panel = Panel.Packages("effect", Panel.Target.Clip) },
-        Tool("bodyeffects", "Body effects", LucideIcons.UserRound) { vm.panel = Panel.BodyEffects },
+        Tool("videoeffects", "Efeitos de vídeo", LucideIcons.Star) { vm.panel = Panel.Packages("effect", Panel.Target.Clip) },
+        Tool("bodyeffects", "Efeitos corporais", LucideIcons.UserRound) { vm.panel = Panel.BodyEffects },
     )
     "speed" -> listOf(
         Tool("normal", "Normal", LucideIcons.TrendingUp) { vm.panel = Panel.Speed(curve = false) },
-        Tool("curve", "Curve", LucideIcons.ChartSpline) { vm.panel = Panel.Speed(curve = true) },
+        Tool("curve", "Curva", LucideIcons.ChartSpline) { vm.panel = Panel.Speed(curve = true) },
     )
     "transform" -> listOf(
-        Tool("rotate", "Rotate", LucideIcons.RotateCw) { vm.rotate(clip) },
-        Tool("mirror", "Mirror", LucideIcons.FlipVertical2) { vm.mirror(clip) },
-        Tool("advanced", "Advanced", LucideIcons.SlidersHorizontal) { vm.panel = Panel.Basic },
+        Tool("rotate", "Girar", LucideIcons.RotateCw) { vm.rotate(clip) },
+        Tool("mirror", "Espelhar", LucideIcons.FlipVertical2) { vm.mirror(clip) },
+        Tool("advanced", "Avançado", LucideIcons.SlidersHorizontal) { vm.panel = Panel.Basic },
     )
     // the model takes the background off, or a colour is keyed out; a new background then shows behind
     "removebg" -> listOf(
-        Tool("autoremove", "Auto removal", LucideIcons.UserRoundX) { vm.panel = Panel.RemoveBg },
-        Tool("customremove", "Custom removal", LucideIcons.Paintbrush) { vm.panel = Panel.CustomCutout },
+        Tool("autoremove", "Remoção automática", LucideIcons.UserRoundX) { vm.panel = Panel.RemoveBg },
+        Tool("customremove", "Remoção personalizada", LucideIcons.Paintbrush) { vm.panel = Panel.CustomCutout },
         Tool("chroma", "Chroma key", LucideIcons.Pipette) { vm.panel = Panel.Chroma },
-        Tool("changebg", "Change BG", LucideIcons.ImagePlus, enabled = io.github.artcraftandroid.capcraft.ui.editor.panels.cutoutOn(vm, clip)) {
+        Tool("changebg", "Alterar fundo", LucideIcons.ImagePlus, enabled = io.github.artcraftandroid.capcraft.ui.editor.panels.cutoutOn(vm, clip)) {
             vm.panel = Panel.Background(0)
         },
     )
@@ -358,39 +358,39 @@ private fun clipSubTools(vm: EditorViewModel, clip: ClipView, level: String): Li
 private fun clipTools(vm: EditorViewModel, clip: ClipView, row: RowKind, pickers: Pickers): List<Tool> {
     val inside = vm.playhead > clip.startUs + 30_000 && vm.playhead < clip.startUs + clip.durationUs - 30_000
     // always offered, as the reference does; at a clip's very edge there is nothing to cut
-    val split = Tool("split", "Split", LucideIcons.SquareSplitHorizontal) {
-        if (inside) vm.edit { split(listOf(clip.id), vm.playhead) } else vm.message = "Move the playhead inside the clip to split it"
+    val split = Tool("split", "Dividir", LucideIcons.SquareSplitHorizontal) {
+        if (inside) vm.edit { split(listOf(clip.id), vm.playhead) } else vm.message = "Mova o indicador de reprodução para dentro do clipe para dividi-lo"
     }
-    val delete = Tool("delete", "Delete", LucideIcons.Trash) {
+    val delete = Tool("delete", "Excluir", LucideIcons.Trash) {
         vm.edit { delete(listOf(clip.id)) }
         vm.select(null)
     }
-    val duplicate = Tool("duplicate", "Duplicate", LucideIcons.Copy) { vm.edit(select = { it.createdId.ifEmpty { null } }) { duplicate(clip.id) } }
+    val duplicate = Tool("duplicate", "Duplicar", LucideIcons.Copy) { vm.edit(select = { it.createdId.ifEmpty { null } }) { duplicate(clip.id) } }
     // the curve between keyframes needs two of them
-    val graphs = Tool("graphs", "Graphs", LucideIcons.Spline, enabled = clip.keysUs.distinct().size >= 2) { vm.panel = Panel.Graphs }
-    val layer = Tool("layer", "Layers", LucideIcons.Layers) { vm.panel = Panel.Layer }
+    val graphs = Tool("graphs", "Gráficos", LucideIcons.Spline, enabled = clip.keysUs.distinct().size >= 2) { vm.panel = Panel.Graphs }
+    val layer = Tool("layer", "Camadas", LucideIcons.Layers) { vm.panel = Panel.Layer }
     if (clip.kind == "image" && row == RowKind.TEXT) {
         // a sticker, in the reference's order: another sticker set apart, the clip's edits, then the rest
         return listOfNotNull(
-            Tool("stickers", "Stickers", LucideIcons.Sticker) {
+            Tool("stickers", "Figurinhas", LucideIcons.Sticker) {
                 vm.select(null)
                 vm.panel = Panel.Stickers
             },
             divider("d-stickers"),
             split,
-            Tool("animation", "Animations", LucideIcons.SquarePlay) { vm.panel = Panel.Animation },
+            Tool("animation", "Animações", LucideIcons.SquarePlay) { vm.panel = Panel.Animation },
             duplicate,
             delete,
-            Tool("mirror", "Mirror", LucideIcons.FlipVertical2) { vm.mirror(clip) },
+            Tool("mirror", "Espelhar", LucideIcons.FlipVertical2) { vm.mirror(clip) },
             divider("d-stickermore"),
             // several titles and stickers at once, starting with this one
-            Tool("multiselect", "Multi-select", LucideIcons.SquareCheckBig) {
+            Tool("multiselect", "Seleção múltipla", LucideIcons.SquareCheckBig) {
                 vm.select(null)
                 vm.chosen = setOf(clip.id)
             },
-            Tool("basic", "Basic", LucideIcons.SlidersHorizontal) { vm.panel = Panel.Basic },
+            Tool("basic", "Básico", LucideIcons.SlidersHorizontal) { vm.panel = Panel.Basic },
             layer,
-            Tool("tracking", "Tracking", LucideIcons.Crosshair) { vm.panel = Panel.Tracking },
+            Tool("tracking", "Rastreamento", LucideIcons.Crosshair) { vm.panel = Panel.Tracking },
             // the curve between keyframes, once there are two
             graphs.takeIf { it.enabled },
         )
@@ -399,13 +399,13 @@ private fun clipTools(vm: EditorViewModel, clip: ClipView, row: RowKind, pickers
     if (clip.kind == "text" && clip.id in vm.captions) {
         return listOf(
             split,
-            Tool("style", "Style", LucideIcons.ALargeSmall) { vm.panel = Panel.Text(clip.id) },
+            Tool("style", "Estilo", LucideIcons.ALargeSmall) { vm.panel = Panel.Text(clip.id) },
             // every caption's words in one list
-            Tool("editcaptions", "Edit captions", LucideIcons.TextCursorInput) { vm.panel = Panel.BatchEdit },
+            Tool("editcaptions", "Editar legendas", LucideIcons.TextCursorInput) { vm.panel = Panel.BatchEdit },
             duplicate,
             delete,
-            Tool("tts", "Text to speech", LucideIcons.AudioLines) { vm.panel = Panel.Speech(clip.id) },
-            Tool("basic", "Basic", LucideIcons.SlidersHorizontal) { vm.panel = Panel.Basic },
+            Tool("tts", "Texto para fala", LucideIcons.AudioLines) { vm.panel = Panel.Speech(clip.id) },
+            Tool("basic", "Básico", LucideIcons.SlidersHorizontal) { vm.panel = Panel.Basic },
             layer,
         )
     }
@@ -415,7 +415,7 @@ private fun clipTools(vm: EditorViewModel, clip: ClipView, row: RowKind, pickers
             val main = row == RowKind.MAIN
             // over the video, the bar starts with another overlay, set apart, as the reference's does
             if (!main) {
-                add(Tool("addoverlay", "Add overlay", LucideIcons.SquarePlus) {
+                add(Tool("addoverlay", "Adicionar sobreposição", LucideIcons.SquarePlus) {
                     vm.select(null)
                     pickers.single { vm.addFile(it, asAudio = false) }
                 })
@@ -427,74 +427,74 @@ private fun clipTools(vm: EditorViewModel, clip: ClipView, row: RowKind, pickers
             val ownSound = video && (clip.audible || clip.muted) && !vm.extracted(clip)
             if (ownSound) add(Tool("volume", "Volume", LucideIcons.Volume2) { vm.panel = Panel.Volume })
             // how an overlay mixes with what is under it, under the reference's name for it
-            if (!main) add(Tool("blend", "Splice", LucideIcons.Layers2) { vm.panel = Panel.Blend })
+            if (!main) add(Tool("blend", "Mesclar", LucideIcons.Layers2) { vm.panel = Panel.Blend })
             if (main) {
-                add(Tool("animation", "Animations", LucideIcons.SquarePlay) { vm.panel = Panel.Animation })
-                add(Tool("effects", "Effects", LucideIcons.Star) { vm.clipLevel = "effects" })
+                add(Tool("animation", "Animações", LucideIcons.SquarePlay) { vm.panel = Panel.Animation })
+                add(Tool("effects", "Efeitos", LucideIcons.Star) { vm.clipLevel = "effects" })
                 if (ownSound || !video) add(delete)
             } else {
                 add(delete)
-                add(Tool("animation", "Animations", LucideIcons.SquarePlay) { vm.panel = Panel.Animation })
-                add(Tool("effects", "Effects", LucideIcons.Star) { vm.clipLevel = "effects" })
+                add(Tool("animation", "Animações", LucideIcons.SquarePlay) { vm.panel = Panel.Animation })
+                add(Tool("effects", "Efeitos", LucideIcons.Star) { vm.clipLevel = "effects" })
             }
-            if (video) add(Tool("speed", "Speed", LucideIcons.Gauge) { vm.clipLevel = "speed" })
+            if (video) add(Tool("speed", "Velocidade", LucideIcons.Gauge) { vm.clipLevel = "speed" })
             if (main && video && !ownSound) add(delete)
-            if (video) add(Tool("beats", "Beats", LucideIcons.Flag, enabled = clip.audible) { vm.panel = Panel.Beats })
-            add(Tool("crop", "Crop", LucideIcons.Crop) { vm.panel = Panel.Crop })
+            if (video) add(Tool("beats", "Batidas", LucideIcons.Flag, enabled = clip.audible) { vm.panel = Panel.Beats })
+            add(Tool("crop", "Cortar", LucideIcons.Crop) { vm.panel = Panel.Crop })
             add(duplicate)
-            add(Tool("replace", "Replace", LucideIcons.Repeat) { pickers.single { vm.replace(clip, it) } })
-            if (main) add(Tool("tooverlay", "Overlay", LucideIcons.Shuffle) { vm.switchToOverlay(clip) })
-            else add(Tool("tomain", "Maintrack", LucideIcons.Shuffle) { vm.switchToMain(clip) })
-            add(Tool("adjust", "Adjust", LucideIcons.Settings2) { vm.panel = Panel.Adjust })
-            add(Tool("filters", "Filters", LucideIcons.Blend) { vm.panel = Panel.Packages("filter", Panel.Target.Clip) })
+            add(Tool("replace", "Substituir", LucideIcons.Repeat) { pickers.single { vm.replace(clip, it) } })
+            if (main) add(Tool("tooverlay", "Sobreposição", LucideIcons.Shuffle) { vm.switchToOverlay(clip) })
+            else add(Tool("tomain", "Faixa principal", LucideIcons.Shuffle) { vm.switchToMain(clip) })
+            add(Tool("adjust", "Ajustar", LucideIcons.Settings2) { vm.panel = Panel.Adjust })
+            add(Tool("filters", "Filtros", LucideIcons.Blend) { vm.panel = Panel.Packages("filter", Panel.Target.Clip) })
             add(divider("d-look"))
-            add(Tool("retouch", "Retouch", LucideIcons.Smile) { vm.panel = Panel.Retouch })
+            add(Tool("retouch", "Retocar", LucideIcons.Smile) { vm.panel = Panel.Retouch })
             // a clearer copy, for photos and footage alike
-            add(Tool("enhancequality", "Video quality", MaterialIcons.Hd) { vm.panel = Panel.Quality })
-            add(Tool("removebg", "Remove BG", LucideIcons.UserRoundX) { vm.clipLevel = "removebg" })
+            add(Tool("enhancequality", "Qualidade do vídeo", MaterialIcons.Hd) { vm.panel = Panel.Quality })
+            add(Tool("removebg", "Remover fundo", LucideIcons.UserRoundX) { vm.clipLevel = "removebg" })
             // the picture lit again, on the main track as the reference offers it
-            if (main) add(Tool("relight", "Relight", LucideIcons.Lightbulb) { vm.panel = Panel.Relight })
-            add(Tool("opacity", "Opacity", LucideIcons.Droplet) { vm.panel = Panel.Opacity })
-            if (video) add(Tool("motionblur", "Motion blur", LucideIcons.Wind) { vm.panel = Panel.MotionBlur })
+            if (main) add(Tool("relight", "Reiluminar", LucideIcons.Lightbulb) { vm.panel = Panel.Relight })
+            add(Tool("opacity", "Opacidade", LucideIcons.Droplet) { vm.panel = Panel.Opacity })
+            if (video) add(Tool("motionblur", "Desfoque de movimento", LucideIcons.Wind) { vm.panel = Panel.MotionBlur })
             add(divider("d-shape"))
-            add(Tool("transform", "Transform", LucideIcons.Crop) { vm.clipLevel = "transform" })
-            if (!main) add(Tool("layer", "Layer", LucideIcons.Layers) { vm.panel = Panel.Layer })
-            add(Tool("autoreframe", "Auto reframe", LucideIcons.Ratio) { vm.panel = Panel.AutoReframe })
+            add(Tool("transform", "Transformar", LucideIcons.Crop) { vm.clipLevel = "transform" })
+            if (!main) add(Tool("layer", "Camada", LucideIcons.Layers) { vm.panel = Panel.Layer })
+            add(Tool("autoreframe", "Reenquadramento automático", LucideIcons.Ratio) { vm.panel = Panel.AutoReframe })
             if (video) {
-                add(Tool("stabilize", "Stabilize", LucideIcons.Vibrate) { vm.panel = Panel.Stabilize })
-                add(Tool("cameratracking", "Camera tracking", LucideIcons.Crosshair) { vm.panel = Panel.CameraTracking })
+                add(Tool("stabilize", "Estabilizar", LucideIcons.Vibrate) { vm.panel = Panel.Stabilize })
+                add(Tool("cameratracking", "Rastreamento de câmera", LucideIcons.Crosshair) { vm.panel = Panel.CameraTracking })
             }
             // a picture over the video can follow what is under it
-            if (!main) add(Tool("tracking", "Tracking", LucideIcons.Crosshair) { vm.panel = Panel.Tracking })
+            if (!main) add(Tool("tracking", "Rastreamento", LucideIcons.Crosshair) { vm.panel = Panel.Tracking })
             if (video) {
                 add(divider("d-sound"))
                 // once its sound is out on a track of its own, the clip offers only to take it back
                 if (vm.extracted(clip)) {
-                    add(Tool("recover", "Recover audio", LucideIcons.Undo2) { vm.recoverAudio(clip) })
+                    add(Tool("recover", "Recuperar áudio", LucideIcons.Undo2) { vm.recoverAudio(clip) })
                 } else {
-                    add(Tool("extract", "Extract audio", LucideIcons.AudioLines, enabled = clip.audible) { vm.extractAudio(clip) })
-                    add(Tool("isolate", "Isolate voice", LucideIcons.Speech, enabled = clip.audible) { vm.panel = Panel.IsolateVoice })
-                    add(Tool("noise", "Reduce noise", LucideIcons.AudioWaveform, enabled = clip.audible) { vm.toggleCleaner(clip, "concat.denoise", "Noise reduction") })
-                    add(Tool("voice", "Audio effects", LucideIcons.Headphones, enabled = clip.audible) { vm.panel = Panel.Packages("audio", Panel.Target.Clip) })
-                    add(Tool("enhance", "Enhance voice", LucideIcons.MicVocal, enabled = clip.audible) { vm.toggleCleaner(clip, "concat.enhance-voice", "Voice enhancement") })
+                    add(Tool("extract", "Extrair áudio", LucideIcons.AudioLines, enabled = clip.audible) { vm.extractAudio(clip) })
+                    add(Tool("isolate", "Isolar voz", LucideIcons.Speech, enabled = clip.audible) { vm.panel = Panel.IsolateVoice })
+                    add(Tool("noise", "Reduzir ruído", LucideIcons.AudioWaveform, enabled = clip.audible) { vm.toggleCleaner(clip, "concat.denoise", "Noise reduction") })
+                    add(Tool("voice", "Efeitos de áudio", LucideIcons.Headphones, enabled = clip.audible) { vm.panel = Panel.Packages("audio", Panel.Target.Clip) })
+                    add(Tool("enhance", "Melhorar voz", LucideIcons.MicVocal, enabled = clip.audible) { vm.toggleCleaner(clip, "concat.enhance-voice", "Voice enhancement") })
                 }
             }
             add(divider("d-time"))
             if (video) {
-                add(Tool("freeze", "Freeze", LucideIcons.GalleryHorizontal, enabled = inside) { vm.freeze(clip) })
-                add(Tool("reverse", "Reverse", LucideIcons.RotateCcw) { vm.reverse(clip) })
+                add(Tool("freeze", "Congelar", LucideIcons.GalleryHorizontal, enabled = inside) { vm.freeze(clip) })
+                add(Tool("reverse", "Inverter", LucideIcons.RotateCcw) { vm.reverse(clip) })
             }
-            add(Tool("mask", "Mask", LucideIcons.CircleDashed) { vm.panel = Panel.Mask })
+            add(Tool("mask", "Máscara", LucideIcons.CircleDashed) { vm.panel = Panel.Mask })
             if (main) {
                 val free = vm.unlinked(clip)
-                add(Tool("unlink", if (free) "Link" else "Unlink", if (free) LucideIcons.Link2 else LucideIcons.Unlink2) { vm.toggleUnlinked(clip) })
+                add(Tool("unlink", if (free) "Vincular" else "Desvincular", if (free) LucideIcons.Link2 else LucideIcons.Unlink2) { vm.toggleUnlinked(clip) })
             }
-            if (video) add(Tool("transcript", "Transcript", LucideIcons.FileText) { vm.panel = Panel.Transcript })
+            if (video) add(Tool("transcript", "Transcrição", LucideIcons.FileText) { vm.panel = Panel.Transcript })
             add(graphs)
         }
         // in the reference's order: a new recording set apart, the clip's edits, then its sound
         "audio" -> listOf(
-            Tool("record", "Record", LucideIcons.Mic) {
+            Tool("record", "Gravar", LucideIcons.Mic) {
                 vm.select(null)
                 vm.panel = Panel.Voiceover
             },
@@ -504,70 +504,70 @@ private fun clipTools(vm: EditorViewModel, clip: ClipView, row: RowKind, pickers
             duplicate,
             delete,
             // another sound in its place, keeping where it sits and how long it plays
-            Tool("replace", "Replace", LucideIcons.Repeat) {
+            Tool("replace", "Substituir", LucideIcons.Repeat) {
                 vm.replacingSound = clip.id
                 vm.panel = Panel.Sounds
             },
-            Tool("beats", "Beats", LucideIcons.Flag) { vm.panel = Panel.Beats },
+            Tool("beats", "Batidas", LucideIcons.Flag) { vm.panel = Panel.Beats },
             // a sound's speed is one ruler, no curve, as the reference has it
-            Tool("speed", "Speed", LucideIcons.Gauge) { vm.panel = Panel.Speed(curve = false) },
-            Tool("fade", "Fade", LucideIcons.ChartSpline) { vm.panel = Panel.Fade },
-            Tool("isolate", "Isolate voice", LucideIcons.Speech) { vm.panel = Panel.IsolateVoice },
-            Tool("voice", "Audio effects", LucideIcons.Headphones) { vm.panel = Panel.Packages("audio", Panel.Target.Clip) },
-            Tool("enhance", "Enhance voice", LucideIcons.MicVocal) { vm.toggleCleaner(clip, "concat.enhance-voice", "Voice enhancement") },
-            Tool("noise", "Reduce noise", LucideIcons.AudioWaveform) { vm.toggleCleaner(clip, "concat.denoise", "Noise reduction") },
-            Tool("transcript", "Transcript", LucideIcons.FileText) { vm.panel = Panel.Transcript },
+            Tool("speed", "Velocidade", LucideIcons.Gauge) { vm.panel = Panel.Speed(curve = false) },
+            Tool("fade", "Transição de volume", LucideIcons.ChartSpline) { vm.panel = Panel.Fade },
+            Tool("isolate", "Isolar voz", LucideIcons.Speech) { vm.panel = Panel.IsolateVoice },
+            Tool("voice", "Efeitos de áudio", LucideIcons.Headphones) { vm.panel = Panel.Packages("audio", Panel.Target.Clip) },
+            Tool("enhance", "Melhorar voz", LucideIcons.MicVocal) { vm.toggleCleaner(clip, "concat.enhance-voice", "Voice enhancement") },
+            Tool("noise", "Reduzir ruído", LucideIcons.AudioWaveform) { vm.toggleCleaner(clip, "concat.denoise", "Noise reduction") },
+            Tool("transcript", "Transcrição", LucideIcons.FileText) { vm.panel = Panel.Transcript },
         )
         "text", "shape" -> listOf(
             // a new title from here too, set apart, as the reference starts this bar
-            Tool("addtext", "Add text", LucideIcons.Type) {
+            Tool("addtext", "Adicionar texto", LucideIcons.Type) {
                 vm.select(null)
                 vm.panel = Panel.Text(null)
             },
             divider("d-addtext"),
             split,
-            Tool("style", "Style", LucideIcons.ALargeSmall) { vm.panel = if (clip.kind == "shape") Panel.ShapeStyle else Panel.Text(clip.id) },
-            Tool("animation", "Animations", LucideIcons.SquarePlay) { vm.panel = Panel.Animation },
+            Tool("style", "Estilo", LucideIcons.ALargeSmall) { vm.panel = if (clip.kind == "shape") Panel.ShapeStyle else Panel.Text(clip.id) },
+            Tool("animation", "Animações", LucideIcons.SquarePlay) { vm.panel = Panel.Animation },
             delete,
             duplicate,
             divider("d-texttools"),
-            Tool("tts", "Text to speech", LucideIcons.AudioLines, enabled = clip.kind == "text") { vm.panel = Panel.Speech(clip.id) },
+            Tool("tts", "Texto para fala", LucideIcons.AudioLines, enabled = clip.kind == "text") { vm.panel = Panel.Speech(clip.id) },
             // on screen from the first frame to the last
-            Tool("lasting", "Lasting text", LucideIcons.MoveHorizontal) {
+            Tool("lasting", "Texto durante todo o vídeo", LucideIcons.MoveHorizontal) {
                 vm.edit(select = { clip.id }) { lastingText(clip.id) }
-                vm.message = "The text now shows for the whole video"
+                vm.message = "O texto agora aparece durante todo o vídeo"
             },
-            Tool("texteffects", "Effects", LucideIcons.WandSparkles, enabled = clip.kind == "text") { vm.panel = Panel.Text(clip.id, tab = 4) },
-            Tool("tracking", "Tracking", LucideIcons.Crosshair) { vm.panel = Panel.Tracking },
+            Tool("texteffects", "Efeitos", LucideIcons.WandSparkles, enabled = clip.kind == "text") { vm.panel = Panel.Text(clip.id, tab = 4) },
+            Tool("tracking", "Rastreamento", LucideIcons.Crosshair) { vm.panel = Panel.Tracking },
             // one clip per line or sentence, each for its share of the time
-            Tool("autosplit", "Auto split", LucideIcons.SquareSplitHorizontal, enabled = clip.kind == "text") {
+            Tool("autosplit", "Divisão automática", LucideIcons.SquareSplitHorizontal, enabled = clip.kind == "text") {
                 vm.edit(select = { clip.id }) { autoSplitText(clip.id) }
             },
             layer,
-            Tool("basic", "Basic", LucideIcons.SlidersHorizontal) { vm.panel = Panel.Basic },
+            Tool("basic", "Básico", LucideIcons.SlidersHorizontal) { vm.panel = Panel.Basic },
             // several titles and stickers at once, starting with this one
-            Tool("multiselect", "Multi-select", LucideIcons.SquareCheckBig) {
+            Tool("multiselect", "Seleção múltipla", LucideIcons.SquareCheckBig) {
                 vm.select(null)
                 vm.chosen = setOf(clip.id)
             },
         )
         // a look on its row: its strength or its settings, then the clip tools
         else -> if (row == RowKind.FILTER) listOf(
-            Tool("adjust", "Adjust", LucideIcons.SlidersHorizontal) {
+            Tool("adjust", "Ajustar", LucideIcons.SlidersHorizontal) {
                 vm.panel = if (clip.effectId == "concat.adjust") Panel.Adjust else Panel.Packages("filter", Panel.Target.Layer)
             },
             duplicate,
             split,
-            Tool("layer", "Layer", LucideIcons.Layers) { vm.panel = Panel.Layer },
+            Tool("layer", "Camada", LucideIcons.Layers) { vm.panel = Panel.Layer },
             delete,
         ) else listOf(
             // an effect: its settings, another in its place, and what it treats
-            Tool("adjust", "Adjust", LucideIcons.SlidersHorizontal) { vm.panel = Panel.LayerAdjust },
-            Tool("replace", "Replace", LucideIcons.Replace) { vm.panel = Panel.Packages("effect", Panel.Target.Layer) },
+            Tool("adjust", "Ajustar", LucideIcons.SlidersHorizontal) { vm.panel = Panel.LayerAdjust },
+            Tool("replace", "Substituir", LucideIcons.Replace) { vm.panel = Panel.Packages("effect", Panel.Target.Layer) },
             duplicate,
-            Tool("object", "Object", LucideIcons.Database) { vm.panel = Panel.EffectObject },
+            Tool("object", "Objeto", LucideIcons.Database) { vm.panel = Panel.EffectObject },
             delete,
-            Tool("layer", "Layer", LucideIcons.Layers) { vm.panel = Panel.Layer },
+            Tool("layer", "Camada", LucideIcons.Layers) { vm.panel = Panel.Layer },
         )
     }
 }
@@ -596,8 +596,9 @@ fun ToolSearch(vm: EditorViewModel, onClose: () -> Unit) {
     val effects = io.github.artcraftandroid.capcraft.ui.editor.panels.rememberPackages("effect")
         .filter { it.category !in setOf("Cutout", "Color", "Basic", "Text") }
     val words = query.trim()
-    val tools = if (words.isEmpty()) emptyList() else all.filter { it.label.contains(words, ignoreCase = true) }
-    val found = if (words.isEmpty()) emptyList() else effects.filter { it.name.contains(words, ignoreCase = true) }.take(8)
+    val searchWords = normalizeToolSearch(words)
+    val tools = if (searchWords.isEmpty()) emptyList() else all.filter { normalizeToolSearch(it.label).contains(searchWords) }
+    val found = if (searchWords.isEmpty()) emptyList() else effects.filter { normalizeToolSearch(it.name).contains(searchWords) }.take(8)
 
     /** The clip a suggestion acts on: the selected picture, or the main clip under the playhead. */
     fun target() = selected?.takeIf { it.kind == "video" || it.kind == "image" } ?: vm.mainClipAtPlayhead()
@@ -616,22 +617,22 @@ fun ToolSearch(vm: EditorViewModel, onClose: () -> Unit) {
         ) {
             Row(Modifier.fillMaxWidth().height(60.dp).padding(start = 4.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.weight(1f)) {
-                    io.github.artcraftandroid.capcraft.ui.editor.panels.SearchField(query, { query = it }, "Describe what you want to do")
+                    io.github.artcraftandroid.capcraft.ui.editor.panels.SearchField(query, { query = it }, "Descreva o que você quer fazer")
                 }
                 Text(
-                    "Done",
+                    "Concluído",
                     style = Type.BodyStrong.copy(color = Palette.Text, fontSize = 16.sp),
                     modifier = Modifier.clickable(onClick = onClose).padding(horizontal = 12.dp, vertical = 8.dp),
                 )
             }
             Column(Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp)) {
                 if (words.isEmpty()) {
-                    SearchHeading("Recommended")
+                    SearchHeading("Recomendado")
                     listOf<Pair<String, () -> Unit>>(
-                        "Flip video horizontally" to { target()?.let { vm.mirror(it) } ?: run { vm.message = "Add a clip first" } },
-                        "Add auto captions" to { vm.panel = Panel.Captions },
-                        "Reduce video noise" to {
-                            target()?.let { vm.toggleCleaner(it, "concat.denoise", "Noise reduction") } ?: run { vm.message = "Add a clip first" }
+                        "Espelhar vídeo horizontalmente" to { target()?.let { vm.mirror(it) } ?: run { vm.message = "Adicione um clipe primeiro" } },
+                        "Adicionar legendas automáticas" to { vm.panel = Panel.Captions },
+                        "Reduzir ruído do vídeo" to {
+                            target()?.let { vm.toggleCleaner(it, "concat.denoise", "Noise reduction") } ?: run { vm.message = "Adicione um clipe primeiro" }
                         },
                     ).forEach { (line, act) ->
                         Text(
@@ -641,8 +642,8 @@ fun ToolSearch(vm: EditorViewModel, onClose: () -> Unit) {
                         )
                     }
                     Spacer(Modifier.height(18.dp))
-                    SearchHeading("Trending")
-                    SearchSubheading("Effects") {
+                    SearchHeading("Em alta")
+                    SearchSubheading("Efeitos") {
                         onClose()
                         vm.panel = Panel.Packages("effect", Panel.Target.Layer)
                     }
@@ -651,7 +652,7 @@ fun ToolSearch(vm: EditorViewModel, onClose: () -> Unit) {
                         vm.addLayer(e.id, e.name)
                     }
                     Spacer(Modifier.height(16.dp))
-                    SearchSubheading("Sounds") {
+                    SearchSubheading("Sons") {
                         onClose()
                         vm.panel = Panel.SoundFx
                     }
@@ -672,16 +673,16 @@ fun ToolSearch(vm: EditorViewModel, onClose: () -> Unit) {
                                     onClose()
                                 },
                                 contentAlignment = Alignment.Center,
-                            ) { Glyph(LucideIcons.Plus, Palette.Text, size = 18.dp, description = "Add $name") }
+                            ) { Glyph(LucideIcons.Plus, Palette.Text, size = 18.dp, description = "Adicionar $name") }
                         }
                     }
                     Spacer(Modifier.height(24.dp))
                 } else {
                     if (tools.isEmpty() && found.isEmpty()) {
-                        Text("Nothing by that name", style = Type.Small, modifier = Modifier.padding(vertical = 24.dp))
+                        Text("Nenhum resultado com esse nome", style = Type.Small, modifier = Modifier.padding(vertical = 24.dp))
                     }
                     if (tools.isNotEmpty()) {
-                        SearchHeading("Tools")
+                        SearchHeading("Ferramentas")
                         tools.chunked(4).forEach { line ->
                             Row(Modifier.fillMaxWidth()) {
                                 line.forEach { tool ->
@@ -695,7 +696,7 @@ fun ToolSearch(vm: EditorViewModel, onClose: () -> Unit) {
                     }
                     if (found.isNotEmpty()) {
                         Spacer(Modifier.height(12.dp))
-                        SearchHeading("Effects")
+                        SearchHeading("Efeitos")
                         found.chunked(4).forEach { line ->
                             EffectRow(vm, line) { e ->
                                 onClose()
@@ -722,7 +723,7 @@ private fun SearchSubheading(title: String, onMore: () -> Unit) {
     Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(title, style = Type.Body.copy(color = Palette.DockText, fontSize = 14.sp), modifier = Modifier.weight(1f))
         Row(Modifier.clickable(onClick = onMore).padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("More", style = Type.Small.copy(color = Palette.TextSecondary, fontSize = 13.sp))
+            Text("Mais", style = Type.Small.copy(color = Palette.TextSecondary, fontSize = 13.sp))
             Glyph(LucideIcons.ChevronRight, Palette.TextSecondary, size = 16.dp)
         }
     }

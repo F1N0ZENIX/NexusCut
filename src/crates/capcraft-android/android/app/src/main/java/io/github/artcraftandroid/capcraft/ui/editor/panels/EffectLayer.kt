@@ -57,7 +57,7 @@ fun EffectObjectPanel(vm: EditorViewModel) {
         if (every != all) vm.edit(select = { clip.id }) { setReach(clip.id, every) }
     }
 
-    PanelFrame("Object", vm, height = 200.dp) {
+    PanelFrame("Objeto", vm, height = 200.dp) {
         Row(Modifier.fillMaxWidth().weight(1f).padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically) {
             ChoiceTile("All videos", selected = all, onClick = { choose(true) }) {
                 Glyph(LucideIcons.Database, Palette.Text, size = 24.dp)
@@ -98,7 +98,7 @@ fun LayerAdjustPanel(vm: EditorViewModel) {
             Row(Modifier.clickable(onClick = ::reset).padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Glyph(LucideIcons.RotateCcw, Palette.DockText, size = 18.dp)
                 Spacer(Modifier.width(6.dp))
-                Text("Reset", style = Type.Body.copy(color = Palette.DockText))
+                Text("Redefinir", style = Type.Body.copy(color = Palette.DockText))
             }
         },
     ) {
@@ -107,7 +107,7 @@ fun LayerAdjustPanel(vm: EditorViewModel) {
             verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
         ) {
             if (knobs.isEmpty()) {
-                Text("This effect has nothing to set", style = Type.Small, modifier = Modifier.align(Alignment.CenterHorizontally))
+                Text("Este efeito não tem ajustes", style = Type.Small, modifier = Modifier.align(Alignment.CenterHorizontally))
             }
             knobs.forEach { knob ->
                 key(knob.key) {

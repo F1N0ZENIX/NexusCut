@@ -122,7 +122,7 @@ fun MotionBlurPanel(vm: EditorViewModel) {
                 val tint = if (changed) Palette.DockText else Palette.Disabled
                 Glyph(LucideIcons.RotateCcw, tint, size = 16.dp)
                 Spacer(Modifier.width(6.dp))
-                Text("Reset", style = Type.Small.copy(color = tint))
+                Text("Redefinir", style = Type.Small.copy(color = tint))
             }
         },
         onDone = { if (blur > 0f && blend > 0f) run(blur, blend) else if (saved != null) run(0f, 0f) else vm.panel = null },
@@ -135,7 +135,7 @@ fun MotionBlurPanel(vm: EditorViewModel) {
             val p = progress
             if (p != null) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("Blurring… ${(p * 100).roundToInt()}%", style = Type.Small.copy(color = Palette.Text), modifier = Modifier.weight(1f))
+                    Text("Desfocando… ${(p * 100).roundToInt()}%", style = Type.Small.copy(color = Palette.Text), modifier = Modifier.weight(1f))
                     Text(
                         "Cancel",
                         style = Type.Small.copy(color = Palette.Text),

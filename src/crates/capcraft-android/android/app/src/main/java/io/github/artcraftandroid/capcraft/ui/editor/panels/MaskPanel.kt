@@ -172,19 +172,19 @@ fun MaskPanel(vm: EditorViewModel) {
         if (!has("x")) centred(pictureAspect(vm))
         put("shape", id)
     }
-    PanelFrame("Mask", vm, height = 168.dp, left = {
+    PanelFrame("Máscara", vm, height = 168.dp, left = {
         val tint = if (inverted) Palette.Accent else Palette.DockText
         Row(
             Modifier
                 .clickable {
-                    if (params == null) vm.message = "Choose a shape first" else setMask(vm, clip.id, null) { put("invert", if (inverted) 0 else 1) }
+                    if (params == null) vm.message = "Escolha uma forma primeiro" else setMask(vm, clip.id, null) { put("invert", if (inverted) 0 else 1) }
                 }
                 .padding(vertical = 8.dp, horizontal = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Glyph(LucideIcons.FlipHorizontal2, tint, size = 18.dp)
             Spacer(Modifier.width(6.dp))
-            Text("Invert", style = Type.Body.copy(color = tint))
+            Text("Inverter", style = Type.Body.copy(color = tint))
         }
     }) {
         Row(
@@ -218,7 +218,7 @@ private fun MaskTile(label: String, selected: Boolean, adjust: Boolean, onClick:
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Glyph(LucideIcons.SlidersHorizontal, Color.White, size = 20.dp)
                     Spacer(Modifier.height(2.dp))
-                    Text("Adjust", style = Type.Tiny.copy(color = Color.White, fontWeight = FontWeight.SemiBold))
+                    Text("Ajustar", style = Type.Tiny.copy(color = Color.White, fontWeight = FontWeight.SemiBold))
                 }
             } else {
                 glyph()
@@ -349,7 +349,7 @@ private fun MaskAdjust(vm: EditorViewModel, clipId: String, shape: Int, params: 
             }
             Spacer(Modifier.weight(1f))
             Box(Modifier.size(44.dp).clickable(onClick = onClose), contentAlignment = Alignment.Center) {
-                Glyph(LucideIcons.CircleChevronDown, Palette.DockText, size = 22.dp, description = "Close")
+                Glyph(LucideIcons.CircleChevronDown, Palette.DockText, size = 22.dp, description = "Fechar")
             }
         }
         Column(Modifier.fillMaxWidth().height(110.dp), verticalArrangement = Arrangement.Center) {
@@ -396,7 +396,7 @@ private fun MaskAdjust(vm: EditorViewModel, clipId: String, shape: Int, params: 
             ) {
                 Glyph(LucideIcons.RotateCcw, Palette.DockText, size = 18.dp)
                 Spacer(Modifier.width(8.dp))
-                Text("Reset", style = Type.Body.copy(color = Palette.DockText))
+                Text("Redefinir", style = Type.Body.copy(color = Palette.DockText))
             }
         }
     }

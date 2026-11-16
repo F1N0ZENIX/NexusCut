@@ -67,7 +67,7 @@ fun AutoReframePanel(vm: EditorViewModel) {
                     job = null
                     result?.let { vm.applyView(it) }
                     vm.panel = null
-                    vm.message = "Reframed"
+                    vm.message = "Reenquadrado"
                 }
             }
 
@@ -93,7 +93,7 @@ fun AutoReframePanel(vm: EditorViewModel) {
             }.onFailure { e -> launch(Dispatchers.Main) { job = null; vm.message = e.userMessage } }
         }
     }
-    PanelFrame("Auto reframe", vm, height = 250.dp, titleOnTop = true) {
+    PanelFrame("Reenquadramento automático", vm, height = 250.dp, titleOnTop = true) {
         Column(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
             Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 12.dp), verticalAlignment = Alignment.Bottom) {
                 SHAPES.forEachIndexed { i, (label, r) ->

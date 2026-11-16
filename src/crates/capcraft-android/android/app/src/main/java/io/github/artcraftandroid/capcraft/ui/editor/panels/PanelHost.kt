@@ -182,7 +182,7 @@ fun PanelFrame(
             }
             Box(Modifier.then(if (header != null) Modifier.padding(end = 12.dp) else Modifier.weight(1f)), contentAlignment = Alignment.CenterEnd) {
                 Box(Modifier.size(44.dp).clickable(onClick = onDone), contentAlignment = Alignment.Center) {
-                    Glyph(LucideIcons.Check, Palette.DockText, size = 26.dp, description = "Done")
+                    Glyph(LucideIcons.Check, Palette.DockText, size = 26.dp, description = "Concluído")
                 }
             }
         }
@@ -538,10 +538,10 @@ private fun SpeedPanel(vm: EditorViewModel, curve: Boolean) {
                 contentAlignment = Alignment.Center,
             ) { if (pitchFollows) Box(Modifier.size(7.dp).clip(CircleShape).background(Palette.OnAccent)) }
             Spacer(Modifier.width(8.dp))
-            Text("Change audio pitch", style = Type.Small.copy(color = Palette.DockText, fontSize = 13.sp), maxLines = 1)
+            Text("Alterar o tom do áudio", style = Type.Small.copy(color = Palette.DockText, fontSize = 13.sp), maxLines = 1)
         }
     }
-    PanelFrame(if (curve) "Curve" else "Speed", vm, height = if (sound) 200.dp else 230.dp, left = if (curve || !clip.audible || sound) null else pitch) {
+    PanelFrame(if (curve) "Curva" else "Velocidade", vm, height = if (sound) 200.dp else 230.dp, left = if (curve || !clip.audible || sound) null else pitch) {
         if (tab == 0) {
             var speed by remember(clip.id) { mutableFloatStateOf(clip.speed.toFloat()) }
             val sourceUs = (clip.durationUs * clip.speed).toLong()
@@ -551,7 +551,7 @@ private fun SpeedPanel(vm: EditorViewModel, curve: Boolean) {
             } else {
                 // the lengths before and after, heading the sheet
                 Row(Modifier.padding(start = 16.dp, top = 16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("Duration:  %.1fs".format(sourceUs / 1e6), style = Type.Small.copy(fontSize = 14.sp, color = Palette.TextSecondary))
+                    Text("Duração:  %.1fs".format(sourceUs / 1e6), style = Type.Small.copy(fontSize = 14.sp, color = Palette.TextSecondary))
                     Text("  →  ", style = Type.Small.copy(fontSize = 14.sp, color = Color(0xFFFFC94D)))
                     Text("%.1fs".format(sourceUs / 1e6 / speed), style = Type.Small.copy(fontSize = 14.sp, color = Palette.Text))
                 }
@@ -597,7 +597,7 @@ private fun SpeedPanel(vm: EditorViewModel, curve: Boolean) {
                 Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 12.dp)) {
                     CURVES.forEach { c ->
                         val selected = if (c.points == null) current == null else current != null && sameCurve(current, c.points)
-                        ChoiceTile(if (selected && c.points != null) "Edit" else c.name, selected, onClick = {
+                        ChoiceTile(if (selected && c.points != null) "Editar" else c.name, selected, onClick = {
                             // a second tap on the chosen curve opens it for editing
                             if (selected && c.points != null) {
                                 editing = true
@@ -614,7 +614,7 @@ private fun SpeedPanel(vm: EditorViewModel, curve: Boolean) {
                     }
                     // a curve edited away from every preset still shows, and opens
                     if (current != null && CURVES.none { it.points != null && sameCurve(current, it.points) }) {
-                        ChoiceTile("Edit", true, onClick = { editing = true }) { CurveGlyph(current) }
+                        ChoiceTile("Editar", true, onClick = { editing = true }) { CurveGlyph(current) }
                     }
                 }
             }
@@ -714,7 +714,7 @@ private fun BlendPanel(vm: EditorViewModel) {
     val json = remember(clip.json) { vm.clipJson(clip.id) }
     val current = json?.optString("blend")?.ifEmpty { "normal" } ?: "normal"
     var v by remember(clip.id) { mutableFloatStateOf(((json?.optDouble("opacity", 1.0) ?: 1.0) * 100).toFloat()) }
-    PanelFrame("Splice", vm, height = 190.dp) {
+    PanelFrame("Mesclar", vm, height = 190.dp) {
         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(start = 6.dp, end = 6.dp, top = 10.dp)) {
             BLENDS.forEach { (id, label) ->
                 ChoiceTile(label, current == id, onClick = {
@@ -871,7 +871,7 @@ private fun OpacityPanel(vm: EditorViewModel) {
     val clip = vm.selectedClip ?: run { vm.panel = null; return }
     val start = remember(clip.id) { vm.clipJson(clip.id)?.optDouble("opacity", 1.0) ?: 1.0 }
     var v by remember(clip.id) { mutableFloatStateOf((start * 100).toFloat()) }
-    PanelFrame("Opacity", vm, height = 170.dp) {
+    PanelFrame("Opacidade", vm, height = 170.dp) {
         Spacer(Modifier.height(40.dp))
         ValueSlider(
             value = v,
@@ -894,17 +894,17 @@ private fun FadePanel(vm: EditorViewModel) {
     var fadeIn by remember(clip.id) { mutableFloatStateOf((json?.optDouble("fadeIn", 0.0) ?: 0.0).toFloat().coerceAtMost(max)) }
     var fadeOut by remember(clip.id) { mutableFloatStateOf((json?.optDouble("fadeOut", 0.0) ?: 0.0).toFloat().coerceAtMost(max)) }
     // a short sheet, the names indented and the sliders stopping short of the edge, as the reference's
-    PanelFrame("Fade", vm, height = 168.dp) {
+    PanelFrame("Transição de volume", vm, height = 168.dp) {
         val inset = Modifier.padding(start = 34.dp, end = 50.dp)
         Spacer(Modifier.height(10.dp))
         ValueSlider(fadeIn, 0f..max, { "%.1fs".format(it) }, {
             fadeIn = it
             vm.patch(clip.id, JSONObject().put("fadeIn", it.toDouble()), gesture = "fadein")
-        }, { vm.endGesture() }, inset, title = "Fade in")
+        }, { vm.endGesture() }, inset, title = "Entrada gradual")
         ValueSlider(fadeOut, 0f..max, { "%.1fs".format(it) }, {
             fadeOut = it
             vm.patch(clip.id, JSONObject().put("fadeOut", it.toDouble()), gesture = "fadeout")
-        }, { vm.endGesture() }, inset, title = "Fade out")
+        }, { vm.endGesture() }, inset, title = "Saída gradual")
     }
 }
 
@@ -1056,7 +1056,7 @@ private fun TransitionPanel(vm: EditorViewModel, clipId: String) {
     }) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.padding(start = 10.dp).size(36.dp).clickable { keptTab = true; query = "" }, contentAlignment = Alignment.Center) {
-                Glyph(LucideIcons.Bookmark, if (keptTab && query.isBlank()) Palette.Text else Palette.TextSecondary, size = 19.dp, description = "Favorites")
+                Glyph(LucideIcons.Bookmark, if (keptTab && query.isBlank()) Palette.Text else Palette.TextSecondary, size = 19.dp, description = "Favoritos")
             }
             Box(Modifier.weight(1f)) {
                 Tabs(categories, if (query.isBlank() && !keptTab) tab else -1) {
@@ -1070,7 +1070,7 @@ private fun TransitionPanel(vm: EditorViewModel, clipId: String) {
         Box(Modifier.weight(1f).fillMaxWidth()) {
             val none = if (query.isBlank() && !keptTab) 1 else 0
             if (keptTab && query.isBlank() && shown.isEmpty()) {
-                Text("Press and hold one to keep it here", style = Type.Small, modifier = Modifier.align(Alignment.Center))
+                Text("Toque e segure para salvar aqui", style = Type.Small, modifier = Modifier.align(Alignment.Center))
             }
             ChoiceGrid(shown.size + none, Modifier.fillMaxSize()) { i ->
                 if (i < none) {
@@ -1087,7 +1087,7 @@ private fun TransitionPanel(vm: EditorViewModel, clipId: String) {
                             browsing = false
                             applyTo(p.id, duration, false)
                         },
-                        onLongClick = { vm.message = if (Favorites.toggle(context, "transition", p.id)) "Added to favorites" else "Removed from favorites" },
+                        onLongClick = { vm.message = if (Favorites.toggle(context, "transition", p.id)) "Adicionado aos favoritos" else "Removido dos favoritos" },
                     ) {
                         TransitionGlyph(p.id, playing = true, from = from, to = to, modifier = Modifier.fillMaxSize())
                         if (p.id in kept) {
@@ -1107,14 +1107,14 @@ private fun TransitionPanel(vm: EditorViewModel, clipId: String) {
                         .background(Color(0xF2333333))
                         .clickable {
                             applyTo(chosen, duration, true)
-                            vm.message = "Applied to all"
+                            vm.message = "Aplicado a todos"
                         }
                         .padding(horizontal = 14.dp, vertical = 9.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Glyph(LucideIcons.Layers, Palette.Text, size = 16.dp)
                     Spacer(Modifier.width(6.dp))
-                    Text("Apply to all", style = Type.Body.copy(color = Palette.Text))
+                    Text("Aplicar a todos", style = Type.Body.copy(color = Palette.Text))
                 }
             }
         }

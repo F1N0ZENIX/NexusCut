@@ -76,14 +76,14 @@ fun EnhancePanel(vm: EditorViewModel) {
                 .onFailure { e -> launch(Dispatchers.Main) { job = null; vm.message = e.userMessage } }
         }
     }
-    PanelFrame("Super resolution", vm, height = 210.dp, titleOnTop = true) {
+    PanelFrame("Super-resolução", vm, height = 210.dp, titleOnTop = true) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
             Row(
                 Modifier.fillMaxWidth().height(52.dp).clip(RoundedCornerShape(10.dp)).background(Color(0xFF2E2E2E))
                     .clickable(enabled = job == null) { set(!on) }.padding(horizontal = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("Super resolution", style = Type.Body.copy(fontSize = 16.sp, color = Palette.Text), modifier = Modifier.weight(1f))
+                Text("Super-resolução", style = Type.Body.copy(fontSize = 16.sp, color = Palette.Text), modifier = Modifier.weight(1f))
                 Box(
                     Modifier.size(40.dp, 24.dp).clip(RoundedCornerShape(12.dp)).background(if (on) Palette.Accent else Color(0xFF555555)).padding(3.dp),
                     contentAlignment = if (on) Alignment.CenterEnd else Alignment.CenterStart,

@@ -214,7 +214,7 @@ fun AnimationPanel(vm: EditorViewModel) {
     // a search and the kept ones ahead of the tabs, as the reference's bar has them
     var query by remember { mutableStateOf<String?>(null) }
     var kept by remember { mutableStateOf(false) }
-    PanelFrame("Animations", vm, tall = true, titleOnTop = true, header = {
+    PanelFrame("Animações", vm, tall = true, titleOnTop = true, header = {
         AnimHeader(third, tab, query, kept, onTab = { tab = it; kept = false }, onQuery = { query = it }, onKept = { kept = true })
     }) {
         AnimationChoices(vm, clip.id, fixedTab = tab, query = query.orEmpty(), kept = kept)
@@ -247,10 +247,10 @@ private fun AnimHeader(
         Box(
             Modifier.size(32.dp).clip(CircleShape).background(Color(0xFF3A3A3A)).clickable { onQuery("") },
             contentAlignment = Alignment.Center,
-        ) { Glyph(LucideIcons.Search, Palette.DockText, size = 16.dp, description = "Search animations") }
+        ) { Glyph(LucideIcons.Search, Palette.DockText, size = 16.dp, description = "Buscar animações") }
         Box(Modifier.padding(horizontal = 8.dp).size(1.dp, 16.dp).background(Color(0xFF444444)))
         Box(Modifier.size(32.dp).clickable(onClick = onKept), contentAlignment = Alignment.Center) {
-            Glyph(LucideIcons.Bookmark, if (kept) Palette.Text else Palette.TextSecondary, size = 18.dp, description = "Favorites")
+            Glyph(LucideIcons.Bookmark, if (kept) Palette.Text else Palette.TextSecondary, size = 18.dp, description = "Favoritos")
         }
         Tabs(listOf("In", "Out", third), if (kept) -1 else tab) { onTab(it) }
     }
@@ -416,7 +416,7 @@ fun AnimationChoices(vm: EditorViewModel, clipId: String, fixedTab: Int? = null,
         }
         val none = if (query.isBlank() && !kept) 1 else 0
         if (kept && list.isEmpty()) {
-            Text("Press and hold one to keep it here", style = Type.Small, modifier = Modifier.padding(24.dp))
+            Text("Toque e segure para salvar aqui", style = Type.Small, modifier = Modifier.padding(24.dp))
         }
         ChoiceGrid(list.size + none, Modifier.weight(1f)) { i ->
             if (i < none) {
@@ -429,7 +429,7 @@ fun AnimationChoices(vm: EditorViewModel, clipId: String, fixedTab: Int? = null,
                     a.name,
                     current?.name == a.name,
                     onClick = { choose(a.name) },
-                    onLongClick = { vm.message = if (Favorites.toggle(context, "animation", keyOf(a))) "Added to favorites" else "Removed from favorites" },
+                    onLongClick = { vm.message = if (Favorites.toggle(context, "animation", keyOf(a))) "Adicionado aos favoritos" else "Removido dos favoritos" },
                 ) {
                     AnimGlyph(a, playing = true, picture = picture, modifier = Modifier.fillMaxSize())
                     if (keyOf(a) in keptSet) {
@@ -572,7 +572,7 @@ fun BackgroundPanel(vm: EditorViewModel, tab: Int) {
     fun applyToAll() {
         val chosen = current
         vm.edit { setBackground(chosen?.toString() ?: "") }
-        vm.message = "Applied to all"
+        vm.message = "Aplicado a todos"
     }
     val kind = current?.optString("kind")
     // the clip's own frame for the blur tiles, softened more at each level
@@ -588,11 +588,11 @@ fun BackgroundPanel(vm: EditorViewModel, tab: Int) {
             }
         }
     }
-    PanelFrame(listOf("Color", "Image", "Blur").getOrElse(tab) { "Background" }, vm, height = 170.dp, left = {
+    PanelFrame(listOf("Cor", "Imagem", "Desfoque").getOrElse(tab) { "Fundo" }, vm, height = 170.dp, left = {
         Row(Modifier.clickable(onClick = ::applyToAll).padding(vertical = 8.dp, horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             Glyph(LucideIcons.Layers, Palette.DockText, size = 18.dp)
             Spacer(Modifier.width(6.dp))
-            Text("Apply to all", style = Type.Body.copy(color = Palette.DockText))
+            Text("Aplicar a todos", style = Type.Body.copy(color = Palette.DockText))
         }
     }) {
         Row(
@@ -605,7 +605,7 @@ fun BackgroundPanel(vm: EditorViewModel, tab: Int) {
                     Box(
                         Modifier.size(38.dp).clip(CircleShape).background(Color(0xFF3A3A3A)).clickable {
                             vm.pickColor = { rgb -> set(JSONObject().put("kind", "color").put("color", "#%06x".format(rgb and 0xFFFFFF))) }
-                            vm.message = "Tap the preview to pick a colour"
+                            vm.message = "Toque na pré-visualização para escolher uma cor"
                         },
                         contentAlignment = Alignment.Center,
                     ) { Glyph(LucideIcons.Pipette, Palette.DockText, size = 18.dp) }
@@ -715,7 +715,7 @@ fun VoiceoverPanel(vm: EditorViewModel) {
             setAudioEncodingBitRate(128_000)
             setOutputFile(out.absolutePath)
         }
-        runCatching { r.prepare(); r.start() }.onFailure { r.release(); vm.message = "The microphone is not available."; return }
+        runCatching { r.prepare(); r.start() }.onFailure { r.release(); vm.message = "O microfone não está disponível."; return }
         recorder = r
         file = out
         startedAt = vm.playhead
@@ -726,7 +726,7 @@ fun VoiceoverPanel(vm: EditorViewModel) {
 
     DisposableEffect(Unit) { onDispose { stop() } }
 
-    PanelFrame("Record", vm, height = if (choosingVoice) 270.dp else 220.dp, titleOnTop = true) {
+    PanelFrame("Gravar", vm, height = if (choosingVoice) 270.dp else 220.dp, titleOnTop = true) {
         if (choosingVoice) {
             Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 (listOf<PackageInfo?>(null) + voices).forEach { p ->
@@ -752,7 +752,7 @@ fun VoiceoverPanel(vm: EditorViewModel) {
                     if (recorder != null) {
                         Box(Modifier.size(20.dp).clip(RoundedCornerShape(4.dp)).background(Color.White))
                     } else {
-                        Glyph(LucideIcons.Mic, Color.White, size = 28.dp, description = "Record")
+                        Glyph(LucideIcons.Mic, Color.White, size = 28.dp, description = "Gravar")
                     }
                 }
             }
@@ -769,7 +769,7 @@ fun VoiceoverPanel(vm: EditorViewModel) {
         var script by remember { mutableStateOf(vm.prompter) }
         io.github.artcraftandroid.capcraft.ui.common.ConfirmDialog(
             text = "Teleprompter",
-            confirm = "Done",
+            confirm = "Concluído",
             onDismiss = { writing = false },
             content = {
                 androidx.compose.foundation.text.BasicTextField(
@@ -779,7 +779,7 @@ fun VoiceoverPanel(vm: EditorViewModel) {
                     cursorBrush = androidx.compose.ui.graphics.SolidColor(Palette.Accent),
                     decorationBox = { inner ->
                         Box {
-                            if (script.isEmpty()) Text("Type what you will say; it scrolls over the picture while you record.", style = Type.Small)
+                            if (script.isEmpty()) Text("Digite o que vai dizer; o texto rola sobre a imagem durante a gravação.", style = Type.Small)
                             inner()
                         }
                     },

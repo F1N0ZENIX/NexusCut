@@ -102,7 +102,7 @@ fun TrackingPanel(vm: EditorViewModel) {
                     progress = null
                     vm.applyView(result)
                     vm.panel = null
-                    vm.message = "Tracking added"
+                    vm.message = "Rastreamento adicionado"
                 }
             }
 
@@ -114,7 +114,7 @@ fun TrackingPanel(vm: EditorViewModel) {
             }
         }
     }
-    PanelFrame("Tracking", vm, height = 200.dp, titleOnTop = true) {
+    PanelFrame("Rastreamento", vm, height = 200.dp, titleOnTop = true) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             val running = progress
             Text(
@@ -176,7 +176,7 @@ fun CameraTrackingPanel(vm: EditorViewModel) {
                     progress = null
                     vm.applyView(result)
                     vm.panel = null
-                    vm.message = "Camera tracking added"
+                    vm.message = "Rastreamento de câmera adicionado"
                 }
             }
 
@@ -188,9 +188,9 @@ fun CameraTrackingPanel(vm: EditorViewModel) {
             }
         }
     }
-    PanelFrame("Camera tracking", vm, height = 300.dp, titleOnTop = true) {
+    PanelFrame("Rastreamento de câmera", vm, height = 300.dp, titleOnTop = true) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
-            Text("Select tracking subject", style = Type.Small.copy(color = Palette.TextSecondary, fontSize = 13.sp))
+            Text("Selecione o objeto a rastrear", style = Type.Small.copy(color = Palette.TextSecondary, fontSize = 13.sp))
             Spacer(Modifier.height(10.dp))
             Box(
                 Modifier.size(width = 104.dp, height = 56.dp).clip(RoundedCornerShape(6.dp)).background(Color(0xFF262626))
@@ -199,7 +199,7 @@ fun CameraTrackingPanel(vm: EditorViewModel) {
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Glyph(LucideIcons.Crosshair, Palette.Accent, size = 20.dp)
-                    Text("Custom", style = Type.Small.copy(color = Palette.Accent, fontSize = 12.sp))
+                    Text("Personalizado", style = Type.Small.copy(color = Palette.Accent, fontSize = 12.sp))
                 }
             }
             Spacer(Modifier.height(6.dp))

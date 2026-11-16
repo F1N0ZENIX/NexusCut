@@ -84,7 +84,7 @@ fun ArrangeLayersPanel(vm: EditorViewModel) {
                     Modifier.padding(start = 16.dp, top = 10.dp).clickable { menu = !menu }.padding(vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(if (textOnly) "Text and stickers" else "All", style = Type.Body.copy(color = Palette.Text))
+                    Text(if (textOnly) "Texto e figurinhas" else "Tudo", style = Type.Body.copy(color = Palette.Text))
                     Spacer(Modifier.width(4.dp))
                     Glyph(if (menu) LucideIcons.ChevronUp else LucideIcons.ChevronDown, Palette.Text, size = 14.dp)
                 }
@@ -96,7 +96,7 @@ fun ArrangeLayersPanel(vm: EditorViewModel) {
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         if (layers.isEmpty()) {
-                            Text("Nothing on screen here to arrange", style = Type.Small)
+                            Text("Não há nada nesta tela para organizar", style = Type.Small)
                         }
                         val slot = with(LocalDensity.current) { (LAYER_TILE + 10.dp).toPx() }
                         layers.forEachIndexed { i, c ->

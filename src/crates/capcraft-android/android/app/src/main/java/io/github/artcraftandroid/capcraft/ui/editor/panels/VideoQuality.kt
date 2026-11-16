@@ -303,7 +303,7 @@ internal fun ColumnScope.QualityContent(vm: EditorViewModel) {
             }
             working = false
             if (base == null) {
-                vm.message = "Could not read the picture"
+                vm.message = "Não foi possível ler a imagem"
                 return@launch
             }
             // whichever one-tap tool was on gives way
@@ -329,7 +329,7 @@ internal fun ColumnScope.QualityContent(vm: EditorViewModel) {
 
     fun tap(key: String) {
         if (!visual) {
-            vm.message = "Choose a video or photo first"
+            vm.message = "Escolha um vídeo ou uma foto primeiro"
             return
         }
         when (key) {
@@ -346,29 +346,29 @@ internal fun ColumnScope.QualityContent(vm: EditorViewModel) {
                 val s = vm.session
                 when {
                     c == null || s == null -> {}
-                    c.kind != "video" -> vm.message = "Optical flow is for videos"
+                    c.kind != "video" -> vm.message = "O fluxo óptico é para vídeos"
                     smoothing != null -> {}
                     smoothed && which != "flow" -> {}
-                    !smoothed && c.speed > 0.95 -> vm.message = "Slow the clip down first"
+                    !smoothed && c.speed > 0.95 -> vm.message = "Reduza a velocidade do clipe primeiro"
                     else -> {
                         val on = !smoothed
                         if (on) smoothing = 0f
                         vm.stop()
                         scope.launch(io.github.artcraftandroid.capcraft.engine.Threads.commands) {
                             runCatching { s.smoothSlowMotion(c.id, on, smoothListener) }
-                                .onFailure { e -> launch(kotlinx.coroutines.Dispatchers.Main) { smoothing = null; vm.message = e.message ?: "Could not smooth the motion" } }
+                                .onFailure { e -> launch(kotlinx.coroutines.Dispatchers.Main) { smoothing = null; vm.message = e.message ?: "Não foi possível suavizar o movimento" } }
                         }
                     }
                 }
                 which = "flow"
             }
-            "stabilize" -> if (clip?.kind == "video") vm.panel = Panel.Stabilize else vm.message = "Stabilize is for videos"
+            "stabilize" -> if (clip?.kind == "video") vm.panel = Panel.Stabilize else vm.message = "A estabilização é para vídeos"
             "flicker" -> {
                 val c = clip
                 val s = vm.session
                 when {
                     c == null || s == null -> {}
-                    c.kind != "video" -> vm.message = "Remove flickers is for videos"
+                    c.kind != "video" -> vm.message = "A remoção de cintilação é para vídeos"
                     evening != null -> {}
                     // a second tap on the chosen tool puts the original back
                     deflickered && which != "flicker" -> {}
@@ -378,7 +378,7 @@ internal fun ColumnScope.QualityContent(vm: EditorViewModel) {
                         vm.stop()
                         scope.launch(io.github.artcraftandroid.capcraft.engine.Threads.commands) {
                             runCatching { s.removeFlicker(c.id, on, evenListener) }
-                                .onFailure { e -> launch(kotlinx.coroutines.Dispatchers.Main) { evening = null; vm.message = e.message ?: "Could not remove flickers" } }
+                                .onFailure { e -> launch(kotlinx.coroutines.Dispatchers.Main) { evening = null; vm.message = e.message ?: "Não foi possível remover a cintilação" } }
                         }
                     }
                 }
@@ -452,7 +452,7 @@ internal fun ColumnScope.QualityContent(vm: EditorViewModel) {
     var held by remember(which, clip?.id) { mutableStateOf<Float?>(null) }
     when {
         smoothing != null -> Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("Smoothing the motion… ${((smoothing ?: 0f) * 100).roundToInt()}%", style = Type.Small.copy(color = Palette.Text), modifier = Modifier.weight(1f))
+            Text("Suavizando o movimento… ${((smoothing ?: 0f) * 100).roundToInt()}%", style = Type.Small.copy(color = Palette.Text), modifier = Modifier.weight(1f))
             Text(
                 "Cancel",
                 style = Type.Small.copy(color = Palette.Text),
@@ -460,14 +460,14 @@ internal fun ColumnScope.QualityContent(vm: EditorViewModel) {
             )
         }
         evening != null -> Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("Removing flickers… ${((evening ?: 0f) * 100).roundToInt()}%", style = Type.Small.copy(color = Palette.Text), modifier = Modifier.weight(1f))
+            Text("Removendo cintilação… ${((evening ?: 0f) * 100).roundToInt()}%", style = Type.Small.copy(color = Palette.Text), modifier = Modifier.weight(1f))
             Text(
                 "Cancel",
                 style = Type.Small.copy(color = Palette.Text),
                 modifier = Modifier.clickable { runCatching { io.github.artcraftandroid.capcraft.core.cancelDeflicker() } }.padding(8.dp),
             )
         }
-        working -> Text("Reading the picture…", style = Type.Small.copy(color = Palette.TextSecondary), modifier = Modifier.padding(horizontal = 20.dp))
+        working -> Text("Lendo a imagem…", style = Type.Small.copy(color = Palette.TextSecondary), modifier = Modifier.padding(horizontal = 20.dp))
         strength != null -> ValueSlider(
             value = held ?: strength.toFloat(),
             range = 0f..100f,
@@ -498,7 +498,7 @@ internal fun ColumnScope.QualityContent(vm: EditorViewModel) {
         ) {
             Glyph(LucideIcons.RotateCcw, Palette.DockText, size = 18.dp)
             Spacer(Modifier.width(6.dp))
-            Text("Reset", style = Type.Body.copy(color = Palette.DockText))
+            Text("Redefinir", style = Type.Body.copy(color = Palette.DockText))
         }
     }
 }

@@ -132,10 +132,10 @@ fun RelightPanel(vm: EditorViewModel) {
         vm.patch(clip.id, JSONObject().put("videoEffects", next), gesture)
     }
 
-    PanelFrame("Relight", vm, height = 220.dp, titleOnTop = true, header = {
+    PanelFrame("Reiluminar", vm, height = 220.dp, titleOnTop = true, header = {
         Row(Modifier.fillMaxWidth().padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(40.dp).clickable { set(null, null, null) }, contentAlignment = Alignment.Center) {
-                Glyph(LucideIcons.Ban, if (current == null) Palette.Text else Palette.TextSecondary, size = 20.dp, description = "None")
+                Glyph(LucideIcons.Ban, if (current == null) Palette.Text else Palette.TextSecondary, size = 20.dp, description = "Nenhum")
             }
             Row(Modifier.horizontalScroll(rememberScrollState())) {
                 LIGHTS.forEachIndexed { i, (name, _) ->

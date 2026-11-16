@@ -62,7 +62,7 @@ fun RetouchPanel(vm: EditorViewModel) {
             (0 until chain.length()).map { chain.getJSONObject(it) }.firstOrNull { it.optString("id") == RETOUCH }
         }?.optJSONObject("params")
     }
-    PanelFrame("Retouch", vm, height = 240.dp, titleOnTop = true, left = {
+    PanelFrame("Retocar", vm, height = 240.dp, titleOnTop = true, left = {
         Row(
             Modifier.clickable(enabled = params != null) { setRetouch(vm, clip.id, null, 0.0, null) }.padding(vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -70,7 +70,7 @@ fun RetouchPanel(vm: EditorViewModel) {
             val tint = if (params != null) Palette.DockText else Palette.Disabled
             Glyph(LucideIcons.RotateCcw, tint, size = 16.dp)
             Spacer(Modifier.width(6.dp))
-            Text("Reset", style = Type.Small.copy(color = tint))
+            Text("Redefinir", style = Type.Small.copy(color = tint))
         }
     }) {
         Column(Modifier.fillMaxWidth().padding(top = 18.dp)) {

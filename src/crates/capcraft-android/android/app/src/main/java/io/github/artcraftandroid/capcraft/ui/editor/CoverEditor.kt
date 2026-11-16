@@ -103,10 +103,10 @@ fun CoverEditor(vm: EditorViewModel, onClose: () -> Unit) {
     Column(Modifier.fillMaxSize().background(Palette.Black).statusBarsPadding().navigationBarsPadding()) {
         Row(Modifier.fillMaxWidth().height(50.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(44.dp).clickable(onClick = onClose), contentAlignment = Alignment.Center) {
-                Glyph(LucideIcons.X, Palette.Text, size = 26.dp, description = "Close")
+                Glyph(LucideIcons.X, Palette.Text, size = 26.dp, description = "Fechar")
             }
             Spacer(Modifier.weight(1f))
-            Text("Reset", style = Type.Body, modifier = Modifier.clickable { at = 0; tab = 0 }.padding(12.dp))
+            Text("Redefinir", style = Type.Body, modifier = Modifier.clickable { at = 0; tab = 0 }.padding(12.dp))
             Box(
                 Modifier.padding(end = 12.dp).height(32.dp).clip(RoundedCornerShape(8.dp)).background(Palette.Accent)
                     .clickable {
@@ -117,7 +117,7 @@ fun CoverEditor(vm: EditorViewModel, onClose: () -> Unit) {
                                 withContext(Threads.preview) { Media.saveCover(vm.path, chosen) }
                                 vm.coverAt = -1
                                 runCatching { java.io.File(vm.path, "cover-time.txt").writeText("-1") }
-                                vm.message = "Cover saved"
+                                vm.message = "Capa salva"
                                 onClose()
                             }
                             return@clickable
@@ -132,13 +132,13 @@ fun CoverEditor(vm: EditorViewModel, onClose: () -> Unit) {
                             }
                             vm.coverAt = at
                             runCatching { java.io.File(vm.path, "cover-time.txt").writeText(at.toString()) }
-                            vm.message = "Cover saved"
+                            vm.message = "Capa salva"
                             onClose()
                         }
                     }
                     .padding(horizontal = 16.dp),
                 contentAlignment = Alignment.Center,
-            ) { Text("Save", style = Type.BodyStrong.copy(color = Palette.OnAccent)) }
+            ) { Text("Salvar", style = Type.BodyStrong.copy(color = Palette.OnAccent)) }
         }
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
             val density = LocalDensity.current

@@ -82,11 +82,11 @@ fun BasicPanel(vm: EditorViewModel) {
         }
     }
 
-    PanelFrame("Basic", vm, height = 210.dp, left = {
+    PanelFrame("Básico", vm, height = 210.dp, left = {
         Row(Modifier.clickable(onClick = ::reset).padding(vertical = 8.dp, horizontal = 2.dp), verticalAlignment = Alignment.CenterVertically) {
             Glyph(LucideIcons.RotateCcw, Palette.DockText, size = 18.dp)
             Spacer(Modifier.width(6.dp))
-            Text("Reset", style = Type.Body.copy(color = Palette.DockText))
+            Text("Redefinir", style = Type.Body.copy(color = Palette.DockText))
         }
     }) {
         Row(Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 6.dp), verticalAlignment = Alignment.CenterVertically) {

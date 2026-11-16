@@ -75,7 +75,7 @@ fun AudioEffectsPanel(vm: EditorViewModel) {
         vm.patch(clip.id, JSONObject().put("filters", next))
     }
 
-    PanelFrame("Audio effects", vm, tall = true, titleOnTop = true, header = {
+    PanelFrame("Efeitos de áudio", vm, tall = true, titleOnTop = true, header = {
         Row(Modifier.padding(start = 6.dp), verticalAlignment = Alignment.CenterVertically) {
             listOf("Voice filters", "Voice characters").forEachIndexed { i, name ->
                 val on = i == tab && query.isBlank()
@@ -111,10 +111,10 @@ fun AudioEffectsPanel(vm: EditorViewModel) {
                 )
             } else {
                 Box(Modifier.size(32.dp).clickable { searching = true }, contentAlignment = Alignment.Center) {
-                    Glyph(LucideIcons.Search, Palette.DockText, size = 18.dp, description = "Search audio effects")
+                    Glyph(LucideIcons.Search, Palette.DockText, size = 18.dp, description = "Buscar efeitos de áudio")
                 }
                 Box(Modifier.padding(horizontal = 10.dp).size(1.dp, 18.dp).background(Color(0xFF444444)))
-                Text("All", style = Type.BodyStrong.copy(color = Palette.Text, fontSize = 15.sp))
+                Text("Tudo", style = Type.BodyStrong.copy(color = Palette.Text, fontSize = 15.sp))
             }
         }
         LazyVerticalGrid(

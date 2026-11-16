@@ -40,7 +40,7 @@ fun LayerPanel(vm: EditorViewModel) {
 
     fun move(step: Int) = vm.edit { restack(clip.id, step) }
 
-    PanelFrame("Layer", vm) {
+    PanelFrame("Camada", vm) {
         Spacer(Modifier.height(20.dp))
         Text(
             if (count == 1) "Nothing else of its kind to stack against" else "Layer ${place + 1} of $count, counted from the back",

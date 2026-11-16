@@ -113,7 +113,7 @@ fun EnterCaptionsPage(vm: EditorViewModel) {
         if (!voiceover || m == null || v == null) {
             vm.edit { enterCaptions(words, at) }
             vm.panel = null
-            vm.message = "Captions added"
+            vm.message = "Legendas adicionadas"
             return
         }
         busy = "Reading aloud" to 0f
@@ -134,7 +134,7 @@ fun EnterCaptionsPage(vm: EditorViewModel) {
         ) {
             Row(Modifier.fillMaxWidth().height(60.dp).padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(44.dp).clickable { vm.panel = null }, contentAlignment = Alignment.Center) {
-                    Glyph(LucideIcons.X, Palette.Text, size = 24.dp, description = "Close")
+                    Glyph(LucideIcons.X, Palette.Text, size = 24.dp, description = "Fechar")
                 }
                 Spacer(Modifier.weight(1f))
                 val ready = words.isNotBlank() && busy == null
@@ -180,7 +180,7 @@ fun EnterCaptionsPage(vm: EditorViewModel) {
                             Text(words, style = Type.Body.copy(fontSize = 16.sp, color = Palette.Text, lineHeight = 24.sp))
                         } else {
                             Column {
-                                Text("Enter text", style = Type.Body.copy(fontSize = 16.sp, color = Palette.TextSecondary))
+                                Text("Digite o texto", style = Type.Body.copy(fontSize = 16.sp, color = Palette.TextSecondary))
                                 Spacer(Modifier.height(4.dp))
                                 Text(
                                     "Type or paste a script. Each line becomes a caption of its own.",
@@ -206,12 +206,12 @@ fun EnterCaptionsPage(vm: EditorViewModel) {
                         contentAlignment = Alignment.Center,
                     ) { if (voiceover) Glyph(LucideIcons.Check, Color.Black, size = 14.dp) }
                     Spacer(Modifier.width(10.dp))
-                    Text("Voiceover", style = Type.Body.copy(fontSize = 16.sp, color = Palette.Text))
+                    Text("Narração", style = Type.Body.copy(fontSize = 16.sp, color = Palette.Text))
                 }
                 if (voiceover) {
                     Spacer(Modifier.height(10.dp))
                     val size = model?.let { if (it.downloaded) "" else " · %.0f MB download".format(it.sizeBytes.toLong() / 1_048_576.0) }.orEmpty()
-                    Text("Read by: Text to speech$size", style = Type.Small.copy(color = Palette.TextSecondary))
+                    Text("Lido por: texto para fala$size", style = Type.Small.copy(color = Palette.TextSecondary))
                     Spacer(Modifier.height(10.dp))
                     Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         voiceList.forEach { v ->
@@ -238,7 +238,7 @@ fun EnterCaptionsPage(vm: EditorViewModel) {
                     Spacer(Modifier.height(6.dp))
                     LinearProgressIndicator(progress = { fraction }, modifier = Modifier.fillMaxWidth(), color = Palette.Accent, trackColor = Palette.Disabled)
                     Spacer(Modifier.height(10.dp))
-                    Text("Cancel", style = Type.BodyStrong, modifier = Modifier.clickable { runCatching { cancelSpeech() }; busy = null; afterDownload = false })
+                    Text("Cancelar", style = Type.BodyStrong, modifier = Modifier.clickable { runCatching { cancelSpeech() }; busy = null; afterDownload = false })
                 }
                 Spacer(Modifier.height(16.dp))
             }
@@ -275,7 +275,7 @@ private fun listener(
                 onBusy(null)
                 vm.applyView(result)
                 vm.panel = null
-                vm.message = "Captions added"
+                vm.message = "Legendas adicionadas"
             } else {
                 // a download finished
                 onFetched()

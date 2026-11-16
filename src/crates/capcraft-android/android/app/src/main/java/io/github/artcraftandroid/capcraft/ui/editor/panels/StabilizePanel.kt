@@ -93,7 +93,7 @@ fun StabilizePanel(vm: EditorViewModel) {
         }
     }
 
-    PanelFrame("Stabilize", vm, height = if (progress != null) 200.dp else 162.dp) {
+    PanelFrame("Estabilizar", vm, height = if (progress != null) 200.dp else 162.dp) {
         Spacer(Modifier.height(22.dp))
         StopSlider(level, LEVELS.size, enabled = progress == null, onChoose = ::choose)
         Spacer(Modifier.height(10.dp))
@@ -115,7 +115,7 @@ fun StabilizePanel(vm: EditorViewModel) {
         Spacer(Modifier.height(14.dp))
         if (p != null) {
             Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text("Steadying… ${(p * 100).roundToInt()}%", style = Type.Small.copy(color = Palette.Text), modifier = Modifier.weight(1f))
+                Text("Estabilizando… ${(p * 100).roundToInt()}%", style = Type.Small.copy(color = Palette.Text), modifier = Modifier.weight(1f))
                 Text(
                     "Cancel",
                     style = Type.Small.copy(color = Palette.Text),

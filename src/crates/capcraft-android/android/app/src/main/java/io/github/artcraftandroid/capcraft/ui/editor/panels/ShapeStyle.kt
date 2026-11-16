@@ -45,7 +45,7 @@ fun ShapeStylePanel(vm: EditorViewModel) {
         next.edit()
         vm.patch(clip.id, JSONObject().put("shape", next), gesture)
     }
-    PanelFrame("Style", vm, height = 200.dp) {
+    PanelFrame("Estilo", vm, height = 200.dp) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp)) {
             listOf("Fill", "Outline").forEachIndexed { i, label ->
                 if (drawn && i == 0) return@forEachIndexed
@@ -90,7 +90,7 @@ fun ShapeStylePanel(vm: EditorViewModel) {
                         thickness = null
                         vm.endGesture()
                     },
-                    title = "Thickness",
+                    title = "Espessura",
                 )
             }
         }

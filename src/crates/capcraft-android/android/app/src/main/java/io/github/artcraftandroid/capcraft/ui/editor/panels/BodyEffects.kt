@@ -66,7 +66,7 @@ private val LOOKS = listOf(
 fun BodyEffectsPanel(vm: EditorViewModel) {
     val clip = vm.selectedClip?.takeIf { it.kind == "video" || it.kind == "image" } ?: vm.mainClipAtPlayhead()
     if (clip == null) {
-        vm.message = "Add a video first"
+        vm.message = "Adicione um vídeo primeiro"
         vm.panel = null
         return
     }
@@ -111,7 +111,7 @@ fun BodyEffectsPanel(vm: EditorViewModel) {
         }
     }
     val frame = vm.lastFrame
-    PanelFrame("Body effects", vm, tall = true, titleOnTop = true) {
+    PanelFrame("Efeitos corporais", vm, tall = true, titleOnTop = true) {
         val p = progress
         if (p != null) {
             Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
